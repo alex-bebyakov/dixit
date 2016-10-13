@@ -1,0 +1,40 @@
+.btn-banner {
+  font-weight: 600;
+  color: #e74c3c;
+  border-color: #e74c3c;
+  width: 140px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+form {
+  text-shadow: 1px 1px 0 rgba(#e74c3c, .5);
+  color: #e74c3c;
+}
+
+.form-control {
+  width: 240px;
+  margin: auto;
+  text-shadow: 1px 1px 0 rgba(#e74c3c, .5);
+  color: #e74c3c;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus {
+  border-color: black;
+  text-shadow: 1px 1px 0 rgba(black, .5);
+  color: black;
+}
+
+input {
+  border-color: #e74c3c;
+}
+
+.alert-danger {
+  width: 240px;
+  margin: auto;
+  text-shadow: 1px 1px 0 rgba(orange, .5);
+  color: orange;
+  background-color: rgba(255, 255, 255, 0);
+  border-color: orange;
+  padding: 5px;
+}
