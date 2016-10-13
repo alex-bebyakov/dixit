@@ -10,11 +10,12 @@ import {GameModule} from "./game/game.module";
 import {AppComponent} from "./app.component";
 import {routing} from "./app.routing";
 import {fakeBackendProvider} from "./support/fake-backend";
+import { DraggableDirective } from './directives/draggable.directive';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
