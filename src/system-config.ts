@@ -13,8 +13,7 @@ const map: any = {
 };
 
 /** User packages configuration. */
-const packages: any = {
-};
+const packages: any = {};
 
 // Angular specific barrels.
 var ngBarrels = [
@@ -27,15 +26,15 @@ var ngBarrels = [
 ];
 
 // Add package entries for angular packages
-ngBarrels.forEach(function(ngBarrelName) {
+ngBarrels.forEach(function (ngBarrelName) {
   // Bundled (~40 requests):
-  packages['@angular/'+ngBarrelName] = { main: '/bundles/' + ngBarrelName + '.umd.js', defaultExtension: 'js' };
+  packages['@angular/' + ngBarrelName] = {main: '/bundles/' + ngBarrelName + '.umd.js', defaultExtension: 'js'};
   // Individual files (~300 requests):
   //packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
 });
 
 // Use bundle for Rxjs
-packages['rxjs'] = { main: '/bundles/Rx.umd.js', defaultExtension: 'js' };
+packages['rxjs'] = {main: '/bundles/Rx.umd.js', defaultExtension: 'js'};
 
 const barrels: string[] = [
   // Thirdparty barrels.
@@ -43,16 +42,17 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/navbar',
-  'app/home',
+  'app/splash',
+  'app/game',
   'app/footer'
-  ];
+];
 
 barrels.forEach((barrelName: string) => {
-  packages[barrelName] = { main: 'index', defaultExtension: 'js' };
+  packages[barrelName] = {main: 'index', defaultExtension: 'js'};
 });
 
 /** Type declaration for ambient System. */
 declare var System: any;
 
 // Apply the user's configuration.
-System.config({ map, packages });
+System.config({map, packages});

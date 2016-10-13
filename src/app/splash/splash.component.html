@@ -1,15 +1,7 @@
-<div class="parallax text-center" style="background-image: url(images/background.png);" >
+<div class="parallax text-center">
   <div class="parallax-pattern-overlay" [@splashState]="state">
-    <div class="container text-center" id="size-banner" >
-      <div id="btn-banner-wrapper">
-        <a href="" class="btn btn-primary-outline btn-banner" >Новая игра</a>
-      </div>
-      <div id="btn-banner-wrapper">
-        <a href="" class="btn btn-primary-outline btn-banner">Играть</a>
-      </div>
-      <div id="btn-banner-wrapper">
-        <a href="" class="btn btn-primary-outline btn-banner">Настройки</a>
-      </div>
+    <div class="container text-center" id="size-banner">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
