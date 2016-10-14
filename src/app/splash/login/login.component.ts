@@ -24,10 +24,6 @@ export class LoginComponent implements OnInit {
 
   }
 
-  errorReset() {
-    this.error = '';
-  }
-
   login() {
     this.loading = true;
     this.authenticationService.login(this.model.username)
