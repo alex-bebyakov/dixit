@@ -1,20 +1,17 @@
-#size-banner {
+#game-area {
   height: 100vh;
-
   vertical-align: middle;
+  margin-top:100px;
+  margin-bottom:30px;
 }
 
 #drag-1, #drag-2{
   width: 120px;
-  height: 10%;
-  margin: 10%;
-
+  height: 100px;
   background-color: #29e;
   color: white;
-
   border-radius: 0.75em;
   padding: 1%;
-
   -webkit-transform: translate(0px, 0px);
   transform: translate(0px, 0px);
 }

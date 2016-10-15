@@ -1,8 +1,8 @@
 import {Component, OnInit, trigger, state, style, transition, animate} from "@angular/core";
 @Component({
   selector: 'splash',
-  templateUrl: './splash.component.html',
-  styleUrls: ['./splash.component.scss'],
+  templateUrl: 'splash.component.html',
+  styleUrls: ['splash.component.scss'],
 
   animations: [
     trigger('splashState', [
