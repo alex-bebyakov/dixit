@@ -1,4 +1,4 @@
-# Dixit-mean
+# Dixit-mean (in development)
 
 ## Установить библиотеки
 
