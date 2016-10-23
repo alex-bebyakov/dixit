@@ -1,7 +1,7 @@
 ﻿//take from https://github.com/cornflourblue/angular2-jwt-authentication-example.git
 
 import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers} from "@angular/http";
 import {Observable} from "rxjs";
 import "rxjs/add/operator/map";
 
@@ -11,12 +11,13 @@ export class AuthenticationService {
   public token: string;
 
   constructor(private http: Http) {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.token = currentUser && currentUser.token;
+
   }
 
-  login(username): Observable<boolean> {
-    return this.http.post('/api/authenticate', JSON.stringify({username: username}))
+  login(username:string): Observable<boolean> {
+    var jsonHeaders = new Headers();
+    jsonHeaders.append('Content-Type', 'application/json');
+    return this.http.post('/api/authenticate', {username: username},{headers:jsonHeaders})
       .map((response: Response) => {
         let token = response.json() && response.json().token;
         if (token) {
