@@ -1,0 +1,31 @@
+<div *ngIf="!player.isUser">
+    <div class="player-wrapper player-min">
+        <div class="stick-nudlle">
+            <img src='/assets/images/stick.png' class="img-fluid"/>
+        </div>
+        <div class="player">
+
+            <div class="avat-image">
+                <img src={{player.avatarImg}} class="img-fluid"/>
+            </div>
+            <div>
+                {{player.username}}
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="player.isUser">
+    <div class="player-wrapper">
+        <div class="stick-nudlle">
+            <img src='/assets/images/stick.png' class="img-fluid"/>
+        </div>
+        <div class="player">
+            <div class="avat-image">
+                <img src={{player.avatarImg}} class="img-fluid"/>
+            </div>
+            <div>
+                {{player.username}}
+            </div>
+        </div>
+    </div>
+</div>

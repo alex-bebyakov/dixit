@@ -6,7 +6,16 @@ var path = require('path'),
 
 var usersMap = Immutable.Map({});
 var app = express();
-var testUser = {username: 'User'};
+var usersNames = ["Alex", "TimOFey", "DeBook", "Rocket", "Batux", "Groove"];
+var usersAvatars = Immutable.Map({
+    Alex: "assets/images/avatar-default-1.jpg",
+    DeBook: "assets/images/avatar-default-2.jpg",
+    TimOFey: "assets/images/avatar-default-3.jpg",
+    Rocket: "assets/images/avatar-default-4.jpg",
+    Batux: "assets/images/avatar-default-5.jpg",
+    Groove: "assets/images/avatar-default-6.jpg"
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -44,10 +53,17 @@ var sourceDisconnect = Rx.Observable.create(function (observer) {
 
 var observerConnect = sourceConnect
   .subscribe(function (obj) {
-    var socketId = obj.data.socketId;
-    usersMap = usersMap.set(socketId, obj.data);
-    console.log(obj.event);
-    console.log(socketId);
+      var data = obj.data;
+      data["token"] = "newUser";
+      usersMap.toArray().forEach(function (element) {
+          if (element.username === obj.data.username) {
+              data["token"] = "userExist";
+          }
+      })
+      data["avatarImg"] = usersAvatars.get(obj.data.username)
+      console.log(data);
+      usersMap = usersMap.set(obj.data.socketId, data);
+      console.log(data);
     io.emit('usersMap', usersMap.toArray());
   });
 
@@ -56,15 +72,21 @@ var observerDisconnect = sourceDisconnect
     var socketId = obj.socketId;
     var user = usersMap.get(socketId);
     usersMap = usersMap.delete(obj.socketId);
-    console.log(obj.event);
-    console.log(socketId);
     io.emit('usersMap', usersMap.toArray());
   });
 
 app.post('/api/authenticate', function (req, res) {
-  if (req.body.username === testUser.username) {
-    res.status(200).send({token: 'userLogIn'});
-  } else {
-    res.status(200).send({});
-  }
+    isUserInAuthList = false;
+    usersNames.forEach(function (username) {
+        if (req.body.username === username) {
+            isUserInAuthList = true;
+        }
+    })
+
+    if (isUserInAuthList) {
+        res.status(200).send({token: 'userLogIn'});
+    } else {
+        res.status(200).send({});
+    }
+
 });

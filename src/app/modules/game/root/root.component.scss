@@ -1,18 +1,38 @@
 #game-area {
   height: 100vh;
   vertical-align: middle;
-  margin-top:100px;
+  margin-top: 75px;
   margin-bottom:30px;
+  margin-left: 15px;
+  padding-left: 15px;
 }
 
-#drag-1, #drag-2{
-  width: 120px;
-  height: 100px;
-  background-color: #29e;
-  color: white;
-  border-radius: 0.75em;
-  padding: 1%;
-  -webkit-transform: translate(0px, 0px);
-  transform: translate(0px, 0px);
+.playing-area {
+  float: left;
+  display: inline-block;
+  margin-right: 90px;
 }
+
+.player-dummy {
+  height: 150px;
+  float: left;
+  display: inline-block;
+}
+
+.talking-area {
+  height: 560px;
+  width: 420px;
+
+  float: left;
+  display: inline-block;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-image: url('/assets/images/chat-texture.jpg');
+}
+
+.user-area {
+  margin-top: 20px;
+}
+
+
 
