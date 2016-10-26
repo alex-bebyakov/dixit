@@ -15,3 +15,7 @@ npm start
 ## Перейти в браузере по адресу
 
 http://localhost:5002
+
+## Имена пользователей
+
+Alex, Rocket, DeBook, TimOFey, Batux, Groove
