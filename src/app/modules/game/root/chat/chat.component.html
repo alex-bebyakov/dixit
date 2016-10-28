@@ -1,1 +1,33 @@
+<div class="chat-container">
+    <div class="msg-container-base">
+        <div *ngFor="let message of messages | async">
+            <div class="msg-container">
+                <div class="msg-user-container">
+                    <div class="user-img">
+                        <img src={{message.img}} class="img-fluid"/>
+                    </div>
 
+                    <div>
+                        {{message.username}}
+                    </div>
+                </div>
+                <div class="msg-content-container">
+                    <div class="msg-text">
+                        {{message.text}}
+                    </div>
+                    <div class="msg-time">
+                        {{message.sentAt}}
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <form name="form" (ngSubmit)="f.form.valid&& onChatEnter()" #f="ngForm" novalidate>
+        <div class="form-group">
+            <input type="text" class="form-control" name="text" [(ngModel)]="message.text"
+                   #text="ngModel" required autocomplete="off"/>
+            <div *ngIf="f.submitted && !text.valid" class="help-block"></div>
+        </div>
+    </form>
+</div>

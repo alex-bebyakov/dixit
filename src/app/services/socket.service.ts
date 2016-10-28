@@ -54,6 +54,10 @@ export class SocketService {
         this.username = username;
     }
 
+    public getUsername(): any {
+        return this.username;
+    }
+
     public isUserExist(): boolean {
         return this.userExist;
   }

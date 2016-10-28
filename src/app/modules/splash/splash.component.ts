@@ -17,7 +17,6 @@ import {Component, OnInit, trigger, state, style, transition, animate} from "@an
       transition('inactive => active', animate('3s ease-in')),
       transition('active => inactive', animate('3s ease-out'))
     ])
-
   ]
 })
 export class SplashComponent implements OnInit {

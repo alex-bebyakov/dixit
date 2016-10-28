@@ -16,26 +16,22 @@ import {el} from "@angular/platform-browser/testing/browser_util";
 export class RootComponent implements OnInit {
 
     public players: Observable<Array<Player>>;
-    public chatMessage: ChatMessage;
-    public chatMessages: Subject<any> = new Subject<any>();
+    public userIni: boolean = false;
+    public user: Player;
     private endPoint: SocketService;
-    public dummyPlayer: Player;
 
     constructor(public chatService: MessageService<ChatMessage>,
-                public el: ElementRef,
                 public router: Router) {
         this.endPoint = new SocketService();
         this.endPoint.setUsername(JSON.parse(localStorage.getItem('currentUser')).username);
-        this.chatMessage = new ChatMessage;
-        this.dummyPlayer = new Player();
-        this.dummyPlayer.isUser = false;
-        this.dummyPlayer.username = "dummy";
-        this.dummyPlayer.avatarImg = "assets/images/avatar-default-1.jpg";
+
     }
 
     ngOnInit(): void {
-        this.chatService.messages.subscribe(this.chatMessages);
 
+        this.endPoint.chatMessageStream.subscribe(data => {
+            this.chatService.addMessage(data);
+        });
         this.players = this.endPoint.usersStream.map(data=> {
             let players: Array<Player> = new Array<Player>();
             data.forEach(element=> {
@@ -48,25 +44,18 @@ export class RootComponent implements OnInit {
             return players;
         }).publishReplay(1).refCount();
 
-        this.players.subscribe(names=> {
+        this.players.subscribe(players=> {
+            if (!this.userIni) {
+                players.forEach(player=> {
+                    if (player.isUser) {
+                        this.user = player;
+                        this.userIni = true;
+                    }
+                })
+            }
         })
 
-        this.endPoint.chatMessageStream.subscribe(data => {
-            this.chatService.addMessage(data);
-        });
 
-
-    }
-
-    onChatEnter(event: any): void {
-        this.endPoint.send('chatMessage', this.chatMessage)
-        event.preventDefault();
-    }
-
-    scrollToBottom(): void {
-        let scrollPane: any = this.el
-            .nativeElement.querySelector('.msg-container-base');
-        scrollPane.scrollTop = scrollPane.scrollHeight;
     }
 
     toLoginPage(): void {

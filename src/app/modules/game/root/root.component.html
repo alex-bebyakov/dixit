@@ -1,4 +1,5 @@
 <div id="game-area" *ngIf="!endPoint.isUserExist()">
+
     <div class="playing-area" appDraggable>
         <div class="player-dummy"></div>
         <div *ngFor="let player of players | async">
@@ -16,11 +17,12 @@
             </div>
         </div>
     </div>
-    <div class="talking-area" appDraggable>
-        <chat></chat>
+    <div class="talking-area" appDraggable="">
+        <chat [chat]="chatService" [user]="user"></chat>
     </div>
     <div class="clearfix">
     </div>
+
 </div>
 <div *ngIf="endPoint.isUserExist()">
 </div>

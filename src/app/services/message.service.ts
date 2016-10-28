@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject, Observable}     from 'rxjs';
 import {Message} from '../models/message';
+import {Response, Http} from "@angular/http";
 
 
 let initialMessages: Message[] = [];
@@ -12,23 +13,23 @@ interface IMessagesOperation extends Function {
 @Injectable()
 export class MessageService<T extends Message> {
 
-  newMessages: Subject<Message> = new Subject<Message>();
-  messages: Observable<Message[]>;
+    newMessages: Subject<T> = new Subject<T>();
+    messages: Observable<T[]>;
   updates: Subject<any> = new Subject<any>();
-  create: Subject<Message> = new Subject<Message>();
+    create: Subject<T> = new Subject<T>();
 
-  constructor() {
+    constructor(private http: Http) {
     this.messages = this.updates
-      .scan((messages: Message[],
-             operation: IMessagesOperation) => {
+        .scan((messages: T[],
+               operation: IMessagesOperation) => {
           return operation(messages);
         },
         initialMessages)
       .publishReplay(1)
       .refCount();
     this.create
-      .map(function (message: Message): IMessagesOperation {
-        return (messages: Message[]) => {
+        .map(function (message: T): IMessagesOperation {
+            return (messages: T[]) => {
           return messages.concat(message);
         };
       })
@@ -37,7 +38,18 @@ export class MessageService<T extends Message> {
       .subscribe(this.create);
   }
 
-  addMessage(message: Message): void {
+    addMessage(message: T): void {
     this.newMessages.next(message);
   }
+
+    sendMessage(message: T): Observable<boolean> {
+        return this.http.post('/api/chatMessage', message).map((response: Response) => {
+            if (response.status == 200) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
 }

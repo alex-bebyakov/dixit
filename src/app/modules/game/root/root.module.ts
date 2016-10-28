@@ -6,17 +6,17 @@ import {DraggableDirective} from "../../../directives/draggable.directive";
 import {PlayerComponent} from './player/player.component';
 import {ChatComponent} from './chat/chat.component';
 import {TableComponent} from './table/table.component';
-
+import {FormsModule} from "@angular/forms";
 @NgModule({
   imports: [
-    CommonModule, rootRouting
+      CommonModule, rootRouting, FormsModule
   ],
   declarations: [RootComponent,
       DraggableDirective,
       PlayerComponent,
       ChatComponent,
       TableComponent],
-  exports: [CommonModule]
+    exports: [CommonModule, FormsModule]
 })
 export class RootModule {
 }
