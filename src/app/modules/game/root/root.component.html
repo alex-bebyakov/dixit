@@ -1,8 +1,8 @@
-<div id="game-area" *ngIf="!endPoint.isUserExist()">
+<div class="game-area" *ngIf="!endPoint.isUserExist()&&!endPoint.isToManyUsers()">
 
     <div class="playing-area" appDraggable>
         <div class="player-dummy"></div>
-        <div *ngFor="let player of players | async">
+        <div *ngFor="let player of endPoint.players | async">
             <div *ngIf="!player.isUser">
                 <player [player]="player"></player>
             </div>
@@ -10,7 +10,7 @@
         <div class="clearfix"></div>
         <table></table>
         <div class="user-area">
-            <div *ngFor="let player of players | async">
+            <div *ngFor="let player of endPoint.players | async">
                 <div *ngIf="player.isUser">
                     <player [player]="player"></player>
                 </div>
@@ -24,7 +24,11 @@
     </div>
 
 </div>
-<div *ngIf="endPoint.isUserExist()">
+
+
+<div class="out-area" *ngIf="endPoint.isToManyUsers()&&endPoint.socketIni">
+    <p>Количество игроков превышает допустимое значение (6)</p>
 </div>
-
-
+<div class="out-area" *ngIf="endPoint.isUserExist()&&endPoint.socketIni" (click)="toLoginPage()">
+    <p>Такой пользователь уже находится в игре</p>
+</div>

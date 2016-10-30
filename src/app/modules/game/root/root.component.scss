@@ -1,4 +1,4 @@
-#game-area {
+.game-area {
   height: 100vh;
   vertical-align: middle;
   margin-top: 75px;
@@ -35,5 +35,16 @@
   margin-top: 20px;
 }
 
+.out-area {
+  height: 100vh;
+}
+
+p {
+  background-color: darkorange;
+  padding: 20px 10px;
+  border-radius: 5px;
+  width: 480px;
+  margin: 250px auto;
+}
 
 
