@@ -4,8 +4,7 @@ import {
 import {ChatMessage} from "../../../../models/chat.message";
 import {MessageService} from "../../../../services/message.service";
 import {Subject, Observable} from "rxjs";
-import {SocketService} from "../../../../services/socket.service";
-import {Http, Response} from "@angular/http";
+import {Http} from "@angular/http";
 import {Player} from "../../../../models/player";
 
 @Component({

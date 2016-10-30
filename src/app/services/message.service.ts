@@ -43,7 +43,7 @@ export class MessageService<T extends Message> {
   }
 
     sendMessage(message: T): Observable<boolean> {
-        return this.http.post('/api/chatMessage', message).map((response: Response) => {
+        return this.http.post('/api/chat', message).map((response: Response) => {
             if (response.status == 200) {
                 return true;
             } else {
