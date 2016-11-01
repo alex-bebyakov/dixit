@@ -8,6 +8,7 @@ import {AuthGuard} from "../../services/guard.service";
 import {RootComponent} from "./root/root.component";
 import {MessageService} from "../../services/message.service";
 import {SocketService} from "../../services/socket.service";
+import {GameService} from "../../services/game.service";
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import {SocketService} from "../../services/socket.service";
   exports: [CommonModule],
 
   providers: [
-    AuthGuard,MessageService,AuthenticationService,SocketService
+      AuthGuard, MessageService, AuthenticationService, SocketService, GameService
   ]
 })
 export class GameModule {

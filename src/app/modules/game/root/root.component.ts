@@ -5,7 +5,7 @@ import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {SocketService} from "../../../services/socket.service";
 import {Router} from "@angular/router";
 import {Player} from "../../../models/player";
-import {el} from "@angular/platform-browser/testing/browser_util";
+import {GameMessage} from "../../../models/game.message";
 
 
 @Component({
@@ -17,7 +17,9 @@ export class RootComponent implements OnInit {
     public userIni: boolean = false;
     public user: Player;
     private endPoint: SocketService;
-    constructor(public chatService: MessageService<ChatMessage>,
+
+    constructor(private gameLog: MessageService<GameMessage>,
+                private chatLog: MessageService<ChatMessage>,
                 public router: Router) {
         this.endPoint = new SocketService();
         this.endPoint.setUsername(JSON.parse(localStorage.getItem('currentUser')).username);
@@ -25,18 +27,19 @@ export class RootComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         this.endPoint.chatMessageStream.subscribe(data => {
-            this.chatService.addMessage(data);
+            this.chatLog.addMessage(data);
         });
-
-
+        this.endPoint.gameMessageStream.subscribe(data => {
+            this.gameLog.addMessage(data);
+        });
         this.endPoint.players.subscribe(players=> {
             if (!this.userIni) {
                 players.forEach(player=> {
                     if (player.isUser) {
                         this.user = player;
                         this.userIni = true;
+                        console.log("!!!")
                     }
                 })
             }

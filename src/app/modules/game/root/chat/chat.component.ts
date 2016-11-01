@@ -12,38 +12,17 @@ import {Player} from "../../../../models/player";
     selector: 'chat',
     templateUrl: './chat.component.html',
     styleUrls: ['./chat.component.scss'],
-    animations: [
-        trigger('themeState', [
-            state('inactive', style({
-                transform: 'translateX(0)'
-
-            })),
-            state('active', style({
-                transform: 'translateX(10%)'
-
-            })),
-            transition('inactive => active', animate('3s ease-in')),
-            transition('active => inactive', animate('3s ease-out'))
-        ])
-    ]
 })
 export class ChatComponent implements OnInit {
-    state: string = 'inactive';
+
     public message: ChatMessage;
     public messages: Subject<ChatMessage[]> = new Subject<ChatMessage[]>();
     public chat: MessageService<ChatMessage>;
     public user: Player;
 
-    togglestates() {
-        this.state = (this.state === 'inactive' ? 'active' : 'inactive');
-    }
-
     constructor(public el: ElementRef, private http: Http) {
         this.message = new ChatMessage;
-
-
     }
-
 
     ngOnInit() {
         this.chat.messages.subscribe(this.messages);
@@ -58,7 +37,7 @@ export class ChatComponent implements OnInit {
     }
 
     onChatEnter(event: any) {
-        this.chat.sendMessage(this.message).subscribe();
+        this.chat.sendMessage(this.message, '/api/chat').subscribe();
         this.message.text = "";
     }
 
@@ -66,7 +45,6 @@ export class ChatComponent implements OnInit {
         let scrollPane: any = this.el
             .nativeElement.querySelector('.msg-container-base');
         scrollPane.scrollTop = scrollPane.scrollHeight;
-
     }
 
 }

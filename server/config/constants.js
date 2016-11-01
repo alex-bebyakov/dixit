@@ -8,3 +8,10 @@ exports.Avatars = require('immutable').Map({
     Batux: "assets/images/avatar-default-5.jpg",
     Groove: "assets/images/avatar-default-6.jpg"
 });
+
+exports.NewGame = require('immutable').Map({
+    status: 'over',
+    ini: false,
+    players: require('immutable').Map({}),
+    id: ''
+});

@@ -18,3 +18,7 @@ module.exports = {
         return data.getHours() + ":" + min + ":" + sec;
     }
 }
+
+
+
+
