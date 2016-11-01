@@ -1,7 +1,7 @@
-const users=require('../models/user');
-exports.login=function (req, res) {
+const constants = require('../config/constants');
+exports.login = function (req, res) {
     var isUserInAuthList = false;
-    users.Names.forEach(function (username) {
+    constants.Names.forEach(function (username) {
         if (req.body.username === username) {
             isUserInAuthList = true;
         }

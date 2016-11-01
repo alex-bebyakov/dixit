@@ -1,9 +1,11 @@
-const users=require('../models/user');
+const constants = require('../config/constants');
+var game = require('../services/game.service');
 const Rx = require('rxjs');
 var usersMap = require('immutable').Map({});
 
 module.exports = function (io) {
-    const playerConnect = Rx.Observable.create(function (observer) {
+    game.create();
+    const connectionThread = Rx.Observable.create(function (observer) {
         io.on('connection', function (socket) {
             socket.emit('socketId', {'socketId': socket.id, 'connectTime': Date.now()});
             socket.on('client connect', function (data) {
@@ -14,9 +16,17 @@ module.exports = function (io) {
             io.close();
         }
     });
-
-    playerConnect.subscribe(function (obj) {
-
+    const disconnectionThread = Rx.Observable.create(function (observer) {
+        io.on('connection', function (socket) {
+            socket.on('disconnect', function (data) {
+                observer.next({'socketId': socket.id, 'event': 'client disconnect'});
+            });
+        });
+        return function () {
+            io.close();
+        }
+    });
+    connectionThread.subscribe(function (obj) {
         var data = obj.data;
         data["token"] = "newUser";
         if (usersMap.size > 5) {
@@ -29,36 +39,21 @@ module.exports = function (io) {
             })
         }
         if (data["token"] === "newUser") {
-            data["avatarImg"] = users.Avatars.get(obj.data.username)
+            data["avatarImg"] = constants.Avatars.get(obj.data.username)
+            game.addPlayer(obj.data.username);
+            game.update("addPlayer");
         }
         usersMap = usersMap.set(obj.data.socketId, data);
         io.emit('usersMap', usersMap.toArray());
-        console.log(data);
     });
-
-    const playerDisconnect = Rx.Observable.create(function (observer) {
-        io.on('connection', function (socket) {
-            socket.on('disconnect', function (data) {
-                observer.next({'socketId': socket.id, 'event': 'client disconnect'});
-            });
-        });
-        return function () {
-            io.close();
-        }
-    });
-
-    playerDisconnect.subscribe(function (obj) {
-        var socketId = obj.socketId;
-        var user = usersMap.get(socketId);
+    disconnectionThread.subscribe(function (obj) {
+        game.removePlayer(usersMap.get(obj.socketId).username);
+        game.update("removePlayer");
         usersMap = usersMap.delete(obj.socketId);
         io.emit('usersMap', usersMap.toArray());
+
     });
 
-    const gameStart = Rx.Observable.create(function (observer) {
-        return function () {
-            io.close();
-        }
-    });
 }
 
 

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subject, Observable}     from 'rxjs';
 import {Message} from '../models/message';
 import {Response, Http} from "@angular/http";
+import {Utils} from "../utils";
 
 
 let initialMessages: Message[] = [];
@@ -42,13 +43,9 @@ export class MessageService<T extends Message> {
     this.newMessages.next(message);
   }
 
-    sendMessage(message: T): Observable<boolean> {
-        return this.http.post('/api/chat', message).map((response: Response) => {
-            if (response.status == 200) {
-                return true;
-            } else {
-                return false;
-            }
+    sendMessage(message: T, url: string): Observable<boolean> {
+        return this.http.post(url, message).map((response: Response) => {
+            return Utils.httpResponse(response);
         });
     }
 
