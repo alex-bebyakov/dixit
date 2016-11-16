@@ -5,7 +5,7 @@ import {ChatMessage} from "../../../../models/chat.message";
 import {MessageService} from "../../../../services/message.service";
 import {Subject, Observable} from "rxjs";
 import {Http} from "@angular/http";
-import {Player} from "../../../../models/player";
+import {User} from "../../../../models/user";
 
 @Component({
     inputs: ['chat', 'user'],
@@ -18,7 +18,7 @@ export class ChatComponent implements OnInit {
     public message: ChatMessage;
     public messages: Subject<ChatMessage[]> = new Subject<ChatMessage[]>();
     public chat: MessageService<ChatMessage>;
-    public user: Player;
+    public user: User;
 
     constructor(public el: ElementRef, private http: Http) {
         this.message = new ChatMessage;

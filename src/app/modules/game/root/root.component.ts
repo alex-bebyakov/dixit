@@ -1,11 +1,14 @@
-import {Component, OnInit, ElementRef} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {MessageService} from "../../../services/message.service";
 import {ChatMessage} from "../../../models/chat.message";
-import {Observable, Subject, BehaviorSubject} from "rxjs";
+import {Observable} from "rxjs";
 import {SocketService} from "../../../services/socket.service";
 import {Router} from "@angular/router";
-import {Player} from "../../../models/player";
+import {User} from "../../../models/user";
 import {GameMessage} from "../../../models/game.message";
+import {Http} from "@angular/http";
+import {Game} from "../../../models/game";
+import {Player} from "../../../models/player";
 
 
 @Component({
@@ -15,15 +18,25 @@ import {GameMessage} from "../../../models/game.message";
 })
 export class RootComponent implements OnInit {
     public userIni: boolean = false;
-    public user: Player;
+    public user: User
     private endPoint: SocketService;
+    private gameLog: MessageService<GameMessage>;
+    private chatLog: MessageService<ChatMessage>;
+    public gameMessage: Observable<GameMessage>;
+    public game: Game;
+    public player: Player;
 
-    constructor(private gameLog: MessageService<GameMessage>,
-                private chatLog: MessageService<ChatMessage>,
-                public router: Router) {
-        this.endPoint = new SocketService();
-        this.endPoint.setUsername(JSON.parse(localStorage.getItem('currentUser')).username);
+    constructor(public router: Router, private http: Http) {
 
+        this.gameLog = new MessageService<GameMessage>(http);
+        this.chatLog = new MessageService<ChatMessage>(http);
+        this.user = new User();
+        let username = JSON.parse(localStorage.getItem('currentUser')).username;
+        this.endPoint = new SocketService(username);
+        this.user.username = username;
+        this.gameMessage = new Observable<GameMessage>();
+        this.game = new Game();
+        this.player = new Player();
     }
 
     ngOnInit(): void {
@@ -33,19 +46,26 @@ export class RootComponent implements OnInit {
         this.endPoint.gameMessageStream.subscribe(data => {
             this.gameLog.addMessage(data);
         });
-        this.endPoint.players.subscribe(players=> {
+        this.endPoint.users.subscribe(users=> {
             if (!this.userIni) {
-                players.forEach(player=> {
-                    if (player.isUser) {
-                        this.user = player;
+                users.forEach(user=> {
+                    if (user.isUser) {
+                        this.user = user;
                         this.userIni = true;
-                        console.log("!!!")
                     }
                 })
             }
         })
-
-
+        this.gameMessage = this.gameLog.messages.map((gameMessages: GameMessage[])=> {
+            return gameMessages[gameMessages.length - 1];
+        });
+        this.gameMessage.subscribe(msg=> {
+            console.log(msg)
+        })
+        this.gameMessage.subscribe(message=> {
+            this.game = message.game;
+            this.player = message.player
+        });
     }
 
     toLoginPage(): void {

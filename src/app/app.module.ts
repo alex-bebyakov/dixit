@@ -8,12 +8,13 @@ import {FooterModule} from "./modules/footer/footer.module";
 import {GameModule} from "./modules/game/game.module";
 import {AppComponent} from "./app.component";
 import {routing} from "./app.routing";
+import {CaruselDirective} from './directives/carusel.directive';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
+      AppComponent,
   ],
   imports: [
     BrowserModule,

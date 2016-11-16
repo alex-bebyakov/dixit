@@ -1,28 +1,29 @@
 import {Injectable} from "@angular/core";
 import {Observable, Subject} from "rxjs"
-import {Player} from "../models/player";
+import {User} from "../models/user";
 declare var io: any;
 
 @Injectable()
 export class SocketService {
     private socket: any;
-    public players: Observable<Array<Player>>;
+    public users: Observable<Array<User>>;
     private socketIdStream: Subject<any> = new Subject<any>();
     private usersStream: Subject<any> = new Subject<any>();
     public chatMessageStream: Subject<any> = new Subject<any>();
     public gameMessageStream: Subject<any> = new Subject<any>();
     public userId: any;
     public socketIni: boolean = false;
-    private username: any;
     private userExist: boolean = true;
     private toManyUsers: boolean = false;
+    private gameBegan: boolean = false;
 
-    constructor() {
+    constructor(private username: string) {
+
         this.socket = new io('http://localhost:5002');
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
-        this.gameMessageStream = this.createStream('gameMessage');
+        this.gameMessageStream = this.createStream('gameMessage_'.concat(this.username));
         this.socketIdStream.subscribe(data => {
             this.socket.emit('client connect', {
                 username: this.username,
@@ -30,18 +31,20 @@ export class SocketService {
                 connectTime: data.connectTime
             });
             this.userId = data.socketId;
+
+
         });
-        this.players = this.usersStream.map(data => {
+        this.users = this.usersStream.map(data => {
             this.userExist = false;
             if (!this.socketIni) {
                 this.socketIni = true;
             }
-            let players: Array<Player> = new Array<Player>();
+            let users: Array<User> = new Array<User>();
             data.forEach(element=> {
-                let p: Player = new Player();
-                p.username = element.username;
-                p.avatarImg = element.avatarImg;
-                p.isUser = (element.socketId === this.userId);
+                let u: User = new User();
+                u.username = element.username;
+                u.avatarImg = element.avatarImg;
+                u.isUser = (element.socketId === this.userId);
                 if (element.username === this.username && element.socketId === this.userId) {
                     if (element.token === "userExist") {
                         this.userExist = true;
@@ -49,19 +52,21 @@ export class SocketService {
                     if (element.token === "toManyUsers") {
                         this.toManyUsers = true;
                     }
-                    if (this.userExist || this.toManyUsers) {
+                    if (element.token === "gameBegan") {
+                        this.gameBegan = true;
+                    }
+                    if (this.userExist || this.toManyUsers || this.gameBegan) {
                         this.socket.disconnect();
                     } else {
-                        players.push(p)
+                        users.push(u)
                     }
                 } else {
                     if (!(element.token === "userExist" || element.token === "toManyUsers")) {
-                        players.push(p)
+                        users.push(u)
                     }
-
                 }
             });
-            return players;
+            return users;
 
         }).publishReplay(1).refCount();
     }
@@ -78,10 +83,6 @@ export class SocketService {
         this.socket.emit(name, data);
     }
 
-    public setUsername(username: any): void {
-        this.username = username;
-    }
-
     public getUsername(): any {
         return this.username;
     }
@@ -92,6 +93,10 @@ export class SocketService {
 
     public isToManyUsers(): boolean {
         return this.toManyUsers;
+    }
+
+    public isGameBegan(): boolean {
+        return this.gameBegan;
     }
 
 }

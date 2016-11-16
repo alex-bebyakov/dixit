@@ -3,7 +3,7 @@
 import {TestBed, async} from '@angular/core/testing';
 import {PlayerComponent} from './player.component';
 
-describe('Component: Player', () => {
+describe('Component: User', () => {
     it('should create an instance', () => {
         let component = new PlayerComponent();
         expect(component).toBeTruthy();

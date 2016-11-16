@@ -15,9 +15,7 @@ const gameRoutes: Routes = [
         path: '',
         component: RootComponent,
         canActivate: [AuthGuard]
-
       }
-
     ]
   },
 ];

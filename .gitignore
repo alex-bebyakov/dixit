@@ -3,6 +3,7 @@
 # compiled output
 /client
 /tmp
+/src/assets/images/cards
 
 # dependencies
 /node_modules

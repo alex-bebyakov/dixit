@@ -1,5 +1,8 @@
+import {Card} from "./card";
 export class Player {
-    username: string;
-    avatarImg: string;
-    isUser: boolean;
+    name: string;
+    active: boolean;
+    no: number;
+    score: number;
+    cards: Array<Card>;
 }
