@@ -21,8 +21,8 @@ module.exports = function (io) {
 var connection = function (observer, io) {
     io.on('connection', function (socket) {
         socket.emit('socketId', {'socketId': socket.id, 'connectTime': Date.now()});
-        socket.on('client connect', function (data) {
-            observer.next({'socket': socket, 'data': data, 'event': 'client connect'});
+        socket.on('app connect', function (data) {
+            observer.next({'socket': socket, 'data': data, 'event': 'app connect'});
         });
     });
     return function () {
@@ -33,7 +33,7 @@ var connection = function (observer, io) {
 var disconnection = function (observer, io) {
     io.on('connection', function (socket) {
         socket.on('disconnect', function (data) {
-            observer.next({'socketId': socket.id, 'event': 'client disconnect'});
+            observer.next({'socketId': socket.id, 'event': 'app disconnect'});
         });
     });
     return function () {
@@ -42,16 +42,13 @@ var disconnection = function (observer, io) {
 }
 
 var disconnectUser = function (obj, io) {
-
+    if (usersMap.get(obj.socketId).token === "newUser") {
+        gameService.removePlayer(io, obj.socketId);
+    }
+    usersMap = usersMap.delete(obj.socketId);
     if (usersMap.isEmpty()) {
         gameService.reset();
     } else {
-        if (usersMap.get(obj.socketId).token === "newUser") {
-            gameService.removePlayer(usersMap.get(obj.socketId).username);
-        }
-        usersMap = usersMap.delete(obj.socketId);
-        console.log("disconnect")
-        console.log(usersMap.toArray())
         io.emit('usersMap', usersMap.toArray());
     }
 }
@@ -78,11 +75,9 @@ var connectUser = function (obj, io) {
         }
         if (data["token"] === "newUser") {
             data["avatarImg"] = constants.Avatars.get(obj.data.username)
-            gameService.addPlayer(obj.data.username);
+            gameService.addPlayer(io, obj.data.socketId, obj.data.username);
         }
     }
     usersMap = usersMap.set(obj.data.socketId, data);
-    console.log("connect")
-    console.log(usersMap.toArray())
     io.emit('usersMap', usersMap.toArray());
 }

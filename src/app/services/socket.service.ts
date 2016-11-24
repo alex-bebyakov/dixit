@@ -23,16 +23,14 @@ export class SocketService {
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
-        this.gameMessageStream = this.createStream('gameMessage_'.concat(this.username));
+        this.gameMessageStream = this.createStream('gameMessage_'.concat(username));
         this.socketIdStream.subscribe(data => {
-            this.socket.emit('client connect', {
+            this.socket.emit('app connect', {
                 username: this.username,
                 socketId: data.socketId,
                 connectTime: data.connectTime
             });
             this.userId = data.socketId;
-
-
         });
         this.users = this.usersStream.map(data => {
             this.userExist = false;

@@ -6,7 +6,9 @@ declare var $: any;
 export class CaruselService {
     private element: any
     private imgs: any;
+    private arrows: any
     private imgClass: string
+    private arrowClass: string
     private dx: string
     private dy: string
     private perspective: string
@@ -16,11 +18,11 @@ export class CaruselService {
     constructor(el: ElementRef, attributes: string[]) {
         this.element = $(el.nativeElement);
         this.imgClass = this.element.attr(attributes[0]);
-        this.dx = this.element.attr(attributes[1]);
-        this.dy = this.element.attr(attributes[2]);
-        this.perspective = this.element.attr(attributes[3]);
-        this.radius = parseInt(this.element.attr(attributes[4]));
-
+        this.arrowClass = this.element.attr(attributes[1]);
+        this.dx = this.element.attr(attributes[2]);
+        this.dy = this.element.attr(attributes[3]);
+        this.perspective = this.element.attr(attributes[4]);
+        this.radius = parseInt(this.element.attr(attributes[5]));
     }
 
     rotate(isTurnLeft: boolean): any {
@@ -29,6 +31,7 @@ export class CaruselService {
 
     activate(): any {
         this.imgs = this.element.children(this.imgClass)
+        this.arrows = this.element.children(this.arrowClass)
         this.element.css({
             'transform-style': 'preserve-3d',
             'transform-origin': '50% 50%',
@@ -41,6 +44,25 @@ export class CaruselService {
                 'width': '119px'
             })
         }
+        for (let i = 0; i < 2; i++) {
+            let shift = 0
+            if ($(this.arrows[i]).attr("type") === 'left') {
+                shift = 187
+                $(this.arrows[i]).children('.img-fluid').attr("src", 'assets/images/left_arrow.png')
+            } else {
+                shift = 745
+                $(this.arrows[i]).children('.img-fluid').attr("src", 'assets/images/right_arrow.png')
+            }
+            $(this.arrows[i]).css({
+                'display': 'block',
+                'position': 'absolute',
+                'height': '38px',
+                'width': '38px',
+                'transform': ' translate(' + shift + 'px,200px)',
+                'opacity': '1'
+            })
+
+        }
     }
 
     deactivate(): any {
@@ -50,12 +72,17 @@ export class CaruselService {
                 'transform': 'scale(1)',
                 'height': '118px',
                 'width': '79px'
-
             })
         }
         this.element.css({
             'transform': 'translate(0px, 0px)'
         })
+        for (let i = 0; i < 2; i++) {
+            $(this.arrows[i]).css({
+                'transform': 'translate(0px, 0px)',
+                'display': 'none'
+            })
+        }
     }
 
     private animateImg = function (img: any, position: number, radius: number, isLeftTurn: boolean): void {
@@ -134,5 +161,3 @@ export class CaruselService {
         return index
     }
 }
-
-

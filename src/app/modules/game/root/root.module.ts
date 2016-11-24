@@ -8,6 +8,8 @@ import {ChatComponent} from './chat/chat.component';
 import {TableComponent} from './table/table.component';
 import {FormsModule} from "@angular/forms";
 import {CaruselDirective} from "../../../directives/carusel.directive";
+import {NotificationDirective} from "../../../directives/notification.directive";
+
 @NgModule({
   imports: [
       CommonModule, rootRouting, FormsModule
@@ -15,6 +17,7 @@ import {CaruselDirective} from "../../../directives/carusel.directive";
   declarations: [RootComponent,
       DraggableDirective,
       CaruselDirective,
+      NotificationDirective,
       PlayerComponent,
       ChatComponent,
       TableComponent],

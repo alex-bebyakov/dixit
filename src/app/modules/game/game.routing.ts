@@ -4,7 +4,6 @@ import {GameComponent} from "./game.component";
 import {RootComponent} from "./root/root.component";
 import {AuthGuard} from "../../services/guard.service";
 
-
 const gameRoutes: Routes = [
   {
     path: 'game',

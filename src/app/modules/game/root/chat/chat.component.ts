@@ -1,14 +1,13 @@
 import {
-    Component, OnInit, animate, transition, style, state, trigger, ElementRef
+    Component, OnInit, ElementRef, Input
 } from '@angular/core';
 import {ChatMessage} from "../../../../models/chat.message";
 import {MessageService} from "../../../../services/message.service";
-import {Subject, Observable} from "rxjs";
+import {Subject} from "rxjs";
 import {Http} from "@angular/http";
 import {User} from "../../../../models/user";
 
 @Component({
-    inputs: ['chat', 'user'],
     selector: 'chat',
     templateUrl: './chat.component.html',
     styleUrls: ['./chat.component.scss'],
@@ -17,11 +16,13 @@ export class ChatComponent implements OnInit {
 
     public message: ChatMessage;
     public messages: Subject<ChatMessage[]> = new Subject<ChatMessage[]>();
-    public chat: MessageService<ChatMessage>;
-    public user: User;
+    public chat: MessageService<ChatMessage>
+    @Input() user: User;
 
     constructor(public el: ElementRef, private http: Http) {
         this.message = new ChatMessage;
+        this.chat = new MessageService<ChatMessage>(http);
+
     }
 
     ngOnInit() {

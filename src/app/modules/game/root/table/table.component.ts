@@ -1,7 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {GameMessage} from "../../../../models/game.message";
-import {Subject, Observable} from "rxjs";
-import {Map} from "immutable";
+import {Component, OnInit, Input} from '@angular/core';
+import {UserMessage} from "../../../../models/user.message";
 
 @Component({
     selector: 'table',
@@ -9,15 +7,13 @@ import {Map} from "immutable";
     styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-    public game: Subject<GameMessage>;
-
+    @Input() message: UserMessage
 
     constructor() {
+
     }
 
     ngOnInit() {
 
     }
-
-
 }

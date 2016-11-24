@@ -4,7 +4,6 @@
             <img src='/assets/images/stick.png' class="img-fluid"/>
         </div>
         <div class="player">
-
             <div class="avat-image">
                 <img src={{user.avatarImg}} class="img-fluid"/>
             </div>
@@ -27,14 +26,23 @@
                 {{user.username}}
             </div>
         </div>
-
-
     </div>
-    <div class="hand" appCarusel imgClass=".card-image" shift_X="-160px" shift_Y="-260px" perspective="1200px"
-         radius="240">
-
-        <div *ngFor="let card of player.cards" class="card-image">
-            <img src={{card.img}} class="img-fluid"/>
+    <div class="hand" appCarusel
+         divImgClass=".hand-card-image"
+         divArrowClass=".hand-arrow-image"
+         shift_X="-175px"
+         shift_Y="-280px"
+         perspective="1600px"
+         radius="320"
+         [playerActive]="player.active">
+        <div *ngFor="let card of player.cards" class="hand-card-image">
+            <img src={{card.img}} class="img-fluid "/>
+        </div>
+        <div class="hand-arrow-image" type="left">
+            <img class="img-fluid "/>
+        </div>
+        <div class="hand-arrow-image" type="right">
+            <img class="img-fluid "/>
         </div>
     </div>
     <div class="clearfix"></div>

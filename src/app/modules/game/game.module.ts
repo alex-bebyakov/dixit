@@ -5,11 +5,11 @@ import {gameRouting} from "./game.routing";
 import {RootModule} from "./root/root.module";
 import {AuthenticationService} from "../../services/authentication.service";
 import {AuthGuard} from "../../services/guard.service";
-import {RootComponent} from "./root/root.component";
 import {MessageService} from "../../services/message.service";
 import {SocketService} from "../../services/socket.service";
 import {GameService} from "../../services/game.service";
 import {CaruselService} from "../../services/carusel.service";
+
 
 
 @NgModule({
