@@ -6,41 +6,43 @@ import {CaruselService} from "../services/carusel.service";
     selector: '[appCarusel]'
 })
 export class CaruselDirective {
-    private caruselService: CaruselService;
-    private isActive: boolean = false;
+
     public click = new EventEmitter();
-    _playerActive: boolean
-    constructor(el: ElementRef) {
-        this.caruselService = new CaruselService(el, ['divImgClass', 'divArrowClass', 'shift_X', 'shift_Y', 'perspective', 'radius'])
+
+    _isActive: boolean
+    _gamePhase: string
+    constructor(private el: ElementRef,private caruselService:CaruselService) {
+        this.caruselService.init(el);
     }
 
     @HostListener('click', ['$event']) onClick(e) {
         let type = e.path[1].getAttribute('type')
-        if (this._playerActive) {
-            if (!this.isActive) {
-                this.isActive = true;
-                this.caruselService.activate()
+        if (this._isActive) {
+            if (!this.caruselService.getActive()) {
+                if('asking'===this._gamePhase){
+                    this.caruselService.activate(true);
+                }else {
+                    this.caruselService.activate(false);
+                }
+
                 this.caruselService.rotate(false)
             } else {
                 if ('right' === type) {
                     this.caruselService.rotate(false)
                 } else if ('left' === type) {
                     this.caruselService.rotate(true)
-                } else {
-                    this.caruselService.deactivate()
-                    this.isActive = false;
                 }
             }
         }
-        e.preventDefault()
-
     }
 
-    @Input() set playerActive(isActive) {
-        this._playerActive = isActive || this._playerActive
+    @Input() set isActive(isActive) {
+        this._isActive = isActive
     }
 
-
+    @Input() set gamePhase(phase) {
+        this._gamePhase = phase || this._gamePhase
+    }
 
 }
 

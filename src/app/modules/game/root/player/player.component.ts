@@ -6,6 +6,7 @@ import {Http} from "@angular/http";
 
 import {Player} from "../../../../models/player";
 import {Game} from "../../../../models/game";
+import {CaruselService} from "../../../../services/carusel.service";
 
 @Component({
     selector: 'player',
@@ -19,7 +20,7 @@ export class PlayerComponent implements OnInit {
     @Input() userId: string
     message: UserMessage;
 
-    constructor(private http: Http) {
+    constructor(private http: Http,private caruselService:CaruselService) {
         this.message = new UserMessage();
     }
 
@@ -36,6 +37,20 @@ export class PlayerComponent implements OnInit {
         if (!this.game.started && this.game.status === 'starting' && this.player.active) {
             this.message.command = "Start";
             new MessageService<UserMessage>(this.http).sendMessage(this.message, '/api/game').subscribe();
+            this.message.command = "";
         }
+    }
+    send(){
+        this.caruselService.deactivate()
+        this.message.command="SendCard"
+        this.message.card = this.caruselService.getCard();
+        let result=false
+        new MessageService<UserMessage>(this.http).sendMessage(this.message, '/api/game').subscribe(resp=>{
+            result=resp
+        });
+        this.message.command = "";
+        this.message.text = "";
+
+        return result
     }
 }

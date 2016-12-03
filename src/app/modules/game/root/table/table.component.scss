@@ -2,6 +2,38 @@
   height: 250px;
   background-color: chocolate;
   border-radius: 20px;
-  width: 620px;
+  width: 720px;
+padding-top: 15px;
   background-image: url('/assets/images/table-texture.jpg');
+
+}
+.table-card-image {
+  overflow: hidden;
+  height: 146.875px;
+  width: 98.125px;
+  float: left;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.table-card-selection-wrapper {
+  float: left;
+  display: inline-block;
+
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+
+.table-card-selection-image {
+  overflow: hidden;
+  height: 62px;
+  width: 62px;
+  float: left;
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 28.0625px;
+  margin-right: 28.0625px;
+
 }

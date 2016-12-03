@@ -73,6 +73,10 @@ export class RootComponent implements OnInit {
                 this.masterMessage.text = message.text
                 $('.master-message').change();
             }
+            if(message.text==='Выбор карт завершен. Нажмите для продолжения.'){
+
+                $('.selectable').change();
+            }
         })
     }
 

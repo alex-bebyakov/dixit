@@ -9,6 +9,7 @@ import {TableComponent} from './table/table.component';
 import {FormsModule} from "@angular/forms";
 import {CaruselDirective} from "../../../directives/carusel.directive";
 import {NotificationDirective} from "../../../directives/notification.directive";
+import {SelectableDirective} from "../../../directives/selectable.directive";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import {NotificationDirective} from "../../../directives/notification.directive"
       DraggableDirective,
       CaruselDirective,
       NotificationDirective,
+      SelectableDirective,
       PlayerComponent,
       ChatComponent,
       TableComponent],

@@ -1,5 +1,5 @@
 <div class="game-area" *ngIf="!endPoint.isUserExist()&&!endPoint.isToManyUsers()&&!endPoint.isGameBegan()">
-    <div class="playing-area" appDraggable>
+    <div class="playing-area">
         <div class="player-dummy"></div>
         <div *ngFor="let user of endPoint.users | async">
             <div *ngIf="!user.isUser">
@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="clearfix"></div>
-        <table></table>
+        <table [user]="user" [userId]="userId" [game]="game" [player]="player"></table>
         <div class="user-area">
             <player [user]="user" [userId]="userId" [game]="game" [player]="player"></player>
         </div>

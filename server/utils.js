@@ -17,7 +17,7 @@ module.exports = {
         }
         return data.getHours() + ":" + min + ":" + sec;
     },
-    createRandomGameId: function (len) {
+    createRandomId: function (len) {
         var text = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (var i = 0; i < len; i++) {
@@ -28,12 +28,32 @@ module.exports = {
     generateCardImg: function (number) {
         return 'assets/images/cards/card_'.concat(number.toString()).concat('.png')
     },
+
+    generateNumberImg: function (playerNo,cardNo) {
+       if(cardNo===-1){
+            return 'assets/images/numbers/num_'
+                .concat(playerNo.toString())
+                .concat('_')
+                .concat('.png')
+        }else{
+           return 'assets/images/numbers/num_'
+               .concat(playerNo.toString())
+               .concat('_')
+               .concat(cardNo.toString())
+               .concat('.png')
+       }
+
+    },
+
     addCard: function (card, deck) {
+
         var randomIndex = Math.floor(Math.random() * deck.length)
         var deck = deck;
+
         while ('' !== deck[randomIndex].img) {
             randomIndex = Math.floor(Math.random() * deck.length)
         }
+
         deck[randomIndex] = card;
         return deck;
     },
@@ -49,10 +69,10 @@ module.exports = {
 
     },
 
-    dealCardsForPlayer: function (deck) {
+    dealCardsForPlayer: function (deck,num) {
         var index = deck.length - 1;
         var cards = []
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < num; i++) {
             cards.push(deck[index]);
             deck.splice(index, 1);
             index--;

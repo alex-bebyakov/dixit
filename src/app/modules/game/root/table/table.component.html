@@ -1,3 +1,14 @@
 <div class="table">
+    <div isDisactivate="true" [isActive]="player.tableActive" appSelectable [user]="user" [userId]="userId">
+        <div *ngFor="let card of game.cards" class="table-card-image">
+            <img src={{card.img}} class="img-fluid "/>
+        </div>
+        <div class="clearfix"></div>
+        <!--div class="table-card-selection-wrapper"-->
+            <div *ngFor="let selection of game.selections" class="table-card-selection-image">
+                <img src={{selection.img}} class="img-fluid "/>
+            <!--/div-->
+        </div>
 
+    </div>
 </div>

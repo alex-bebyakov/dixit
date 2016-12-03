@@ -30,11 +30,32 @@
     <div class="hand" appCarusel
          divImgClass=".hand-card-image"
          divArrowClass=".hand-arrow-image"
-         shift_X="-175px"
+         askInputClass=".text-input"
+         answerInputClass=".btn-input"
+         shift_X="-190px"
          shift_Y="-280px"
          perspective="1600px"
          radius="320"
-         [playerActive]="player.active">
+         [isActive]="player.handActive"
+         [gamePhase]="game.phase">
+        <form name="form" (ngSubmit)="f.form.valid && send()" #f="ngForm" novalidate class="text-input">
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !text.valid }">
+                <textarea class="form-control" name="text" [(ngModel)]="message.text"
+                          #text="ngModel" required autocomplete="off"
+                          style="width: 160px; height: 64px; resize: none; outline: none; overflow: auto;
+                                        font-size: 100%; margin: 10px;">
+                </textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-black">Отправить</button>
+            </div>
+        </form>
+        <form name="form" (ngSubmit)="send()" #f="ngForm" novalidate class="btn-input">
+            <div class="form-group">
+                <button class="btn btn-black">Отправить</button>
+            </div>
+        </form>
+
         <div *ngFor="let card of player.cards" class="hand-card-image">
             <img src={{card.img}} class="img-fluid "/>
         </div>

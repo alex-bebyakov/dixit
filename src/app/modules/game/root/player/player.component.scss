@@ -22,6 +22,27 @@
 
 }
 
+.form-control{
+  width: 100px;
+}
+.btn-black {
+  background-color:#696969;
+  color:#FFFFFF;
+  border-color:#292929;
+}
+.btn-black:hover, .btn-black:focus {
+  background-color: #3b3b3b;
+  color: #FFFFFF;
+}
+.btn-black:active {
+  background-color: #3b3b3b;
+  color: #FFFFFF;
+}
+
+.text-input,.btn-input{
+  display: none;
+}
+
 .player-wrapper {
   width: 120px;
   margin: 0 2px 2px 2px;

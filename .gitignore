@@ -4,7 +4,7 @@
 /client
 /tmp
 /src/assets/images/cards
-
+/src/assets/images/numbers
 # dependencies
 /node_modules
 /bower_components
