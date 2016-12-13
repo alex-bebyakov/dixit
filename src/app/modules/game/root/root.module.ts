@@ -8,8 +8,8 @@ import {ChatComponent} from './chat/chat.component';
 import {TableComponent} from './table/table.component';
 import {FormsModule} from "@angular/forms";
 import {CaruselDirective} from "../../../directives/carusel.directive";
-import {NotificationDirective} from "../../../directives/notification.directive";
 import {SelectableDirective} from "../../../directives/selectable.directive";
+import {MasterComponent} from "./master/master.component";
 
 @NgModule({
   imports: [
@@ -18,11 +18,11 @@ import {SelectableDirective} from "../../../directives/selectable.directive";
   declarations: [RootComponent,
       DraggableDirective,
       CaruselDirective,
-      NotificationDirective,
       SelectableDirective,
       PlayerComponent,
       ChatComponent,
-      TableComponent],
+      TableComponent,
+      MasterComponent],
     exports: [CommonModule, FormsModule]
 })
 export class RootModule {

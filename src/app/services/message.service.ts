@@ -1,18 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Subject, Observable}     from 'rxjs';
-import {Message} from '../models/message';
+import {IMessage} from '../interfaces/message';
 import {Response, Http} from "@angular/http";
 import {Utils} from "../utils";
+import {IMessagesOperation} from "../interfaces/messages.operation";
 
 
-let initialMessages: Message[] = [];
-
-interface IMessagesOperation extends Function {
-    (messages: Message[]): Message[];
-}
+let initialMessages: IMessage[] = [];
 
 @Injectable()
-export class MessageService<T extends Message> {
+export class MessageService<T extends IMessage> {
 
     newMessages: Subject<T> = new Subject<T>();
     messages: Observable<T[]>;

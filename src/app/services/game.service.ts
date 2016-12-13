@@ -1,27 +1,29 @@
 import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
-import {Observable} from "rxjs";
-import "rxjs/add/operator/map";
-import {Utils} from "../utils";
-
-
+import {GameMessage} from "../models/game.message";
+import {Game} from "../models/game";
+import {Player} from "../models/player";
 @Injectable()
 export class GameService {
 
-    constructor(private http: Http) {
+    private game: Game
+    private player: Player
 
+    constructor() {
+        this.game = new Game()
+        this.player = new Player()
     }
 
-    getStatus(): Observable<boolean> {
-        return this.http.get('/api/game/status').map((response: Response) => {
-            return Utils.httpResponse(response);
-        });
-
+    update(message: GameMessage) {
+        this.game = message.game;
+        this.player = message.player
     }
 
-    getId(): Observable<boolean> {
-        return this.http.get('/api/game/id').map((response: Response) => {
-            return Utils.httpResponse(response);
-        });
+    getGame() {
+        return this.game
     }
+
+    getPlayer() {
+        return this.player
+    }
+
 }

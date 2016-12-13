@@ -1,6 +1,6 @@
-import {Message} from "./message";
+import {IMessage} from "../interfaces/message";
 
-export class MasterMessage implements Message {
+export class MasterMessage implements IMessage {
     text: string;
 
     constructor() {

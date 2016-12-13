@@ -10,6 +10,6 @@ Player.prototype.tableActive = false
 Player.prototype.no = -1
 Player.prototype.score = -1
 Player.prototype.cards = Card[6]
-Player.prototype.selectImg = ''
+Player.prototype.status = ''
 Player.prototype.selectNum = 0
 module.exports = Player;

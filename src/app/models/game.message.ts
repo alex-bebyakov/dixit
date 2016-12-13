@@ -1,11 +1,13 @@
-import {Message} from "./message";
+import {IMessage} from "../interfaces/message";
 import {Player} from "./player";
 import {Game} from "./game";
-import {UserMessage} from "./user.message";
 
-export class GameMessage implements Message {
+export class GameMessage implements IMessage {
     game: Game;
     player: Player;
-    text: string;
 
+    constructor() {
+        this.game = new Game();
+        this.player = new Player();
+    }
 }

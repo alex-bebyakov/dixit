@@ -1,3 +1,5 @@
+const constants = require('./config/constants');
+var Immutable = require('immutable')
 module.exports = {
     getTimeMark: function () {
         var data = new Date()
@@ -17,6 +19,7 @@ module.exports = {
         }
         return data.getHours() + ":" + min + ":" + sec;
     },
+
     createRandomId: function (len) {
         var text = '';
         var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -25,23 +28,24 @@ module.exports = {
         }
         return text;
     },
+
     generateCardImg: function (number) {
         return 'assets/images/cards/card_'.concat(number.toString()).concat('.png')
     },
 
-    generateNumberImg: function (playerNo,cardNo) {
-       if(cardNo===-1){
+    generateNumberImg: function (playerNo, cardNo) {
+        if (cardNo === -1) {
             return 'assets/images/numbers/num_'
                 .concat(playerNo.toString())
                 .concat('_')
                 .concat('.png')
-        }else{
-           return 'assets/images/numbers/num_'
-               .concat(playerNo.toString())
-               .concat('_')
-               .concat(cardNo.toString())
-               .concat('.png')
-       }
+        } else {
+            return 'assets/images/numbers/num_'
+                .concat(playerNo.toString())
+                .concat('_')
+                .concat(cardNo.toString())
+                .concat('.png')
+        }
 
     },
 
@@ -57,6 +61,7 @@ module.exports = {
         deck[randomIndex] = card;
         return deck;
     },
+
     dealCards: function (deck, players, repeats) {
         var index = deck.length - 1;
         for (var i = 0; i < repeats; i++) {
@@ -69,7 +74,7 @@ module.exports = {
 
     },
 
-    dealCardsForPlayer: function (deck,num) {
+    dealCardsForPlayer: function (deck, num) {
         var index = deck.length - 1;
         var cards = []
         for (var i = 0; i < num; i++) {
@@ -78,6 +83,60 @@ module.exports = {
             index--;
         }
         return cards;
+    },
+
+    setHandsActive: function (players, isActive) {
+        players.forEach(function (value, key) {
+            value.handActive = isActive;
+        })
+
+    },
+    setColor: function (no) {
+        if (no < 0) {
+            return 'transparent'
+        }
+        else {
+            return constants.Colors[no]
+        }
+    },
+    getPositions: function (players) {
+        var positions = Immutable.Map({});
+        players.forEach(function (value, key) {
+            positions = positions.set(key, 1)
+        })
+        players.forEach(function (value, key) {
+            var repeatScore = 0
+            players.forEach(function (value1, key1) {
+                if (key1 !== key && value1.score !== repeatScore) {
+                    if (value.score < value1.score) {
+                        positions = positions.set(key, positions.get(key) + 1)
+                    }
+                    repeatScore = value1.score
+                }
+            })
+        })
+        return positions
+    },
+    getPosition: function (pos) {
+        switch (pos) {
+            case 6:
+                return 'на 6-ом месте.'
+                break;
+            case 5:
+                return 'на 5-ом месте.'
+                break;
+            case 4:
+                return 'на 4-ом месте.'
+                break;
+            case 3:
+                return 'на 3-ем месте!'
+                break;
+            case 2:
+                return 'на 2-ом месте!!'
+                break;
+            default:
+                return 'лидером!!!'
+        }
     }
 }
 

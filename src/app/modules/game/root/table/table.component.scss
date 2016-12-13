@@ -1,39 +1,56 @@
 .table {
-  height: 250px;
-  background-color: chocolate;
+  height: 20vw;
   border-radius: 20px;
-  width: 720px;
-padding-top: 15px;
-  background-image: url('/assets/images/table-texture.jpg');
+  width: 57vw;
+  padding-top: 15px;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
+  background-image: url('/assets/images/backgrounds/table.png');
 
 }
+
 .table-card-image {
   overflow: hidden;
-  height: 146.875px;
-  width: 98.125px;
-  float: left;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
+  height: 10.5vw;
+  width: 7vw;
+  margin-left: 1.05vw;
+  margin-right: 1.05vw;
+  border: 1px solid transparent;
+  border-radius: 5px;
 }
 
-.table-card-selection-wrapper {
+.table-card, .table-card-selection {
   float: left;
   display: inline-block;
-
-  margin-left: 5px;
-  margin-right: 5px;
+  text-align: center;
 }
 
+.table-card-label {
+  font-size: 8pt;
+  text-align: center;
+  border-radius: 3px;
+  margin: auto;
+  display: inline-block;
+}
 
 .table-card-selection-image {
   overflow: hidden;
-  height: 62px;
-  width: 62px;
-  float: left;
-  display: inline-block;
-  margin-top: 10px;
-  margin-left: 28.0625px;
-  margin-right: 28.0625px;
+  height: 4vw;
+  width: 4vw;
+  margin-top: 2.3vw;
+  margin-left: 3.62vw;
+  margin-right: 3.62vw;
 
+}
+
+.table-score {
+  background-color: transparent;
+  height: 2vw;
+  width: 2vw;
+  overflow: hidden;
+  margin-top: -1.5vw;
+  margin-left: 5.5vw;
 }

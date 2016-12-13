@@ -1,37 +1,30 @@
-<div class="game-area" *ngIf="!endPoint.isUserExist()&&!endPoint.isToManyUsers()&&!endPoint.isGameBegan()">
-    <div class="playing-area">
-        <div class="player-dummy"></div>
-        <div *ngFor="let user of endPoint.users | async">
-            <div *ngIf="!user.isUser">
-                <player [user]="user"></player>
+<div class="game-area container-fluid"
+     *ngIf="!endPoint.isUserExist()&&!endPoint.isToManyUsers()&&!endPoint.isGameBegan()">
+    <div class="row">
+        <div class="playing-area col-lg-7 col-md-7 col-xs-7">
+            <div class="players">
+                <div class="player-dummy"></div>
+                <div *ngFor="let user of endPoint.users | async">
+                    <div *ngIf="!user.isUser">
+                        <player [user]="user" [game]="gameOfPlayer"></player>
+                    </div>
+                </div>
             </div>
+            <table [user]="user" [userId]="userId" [game]="gameOfTable" [player]="playerOfTable"></table>
+            <player [user]="user" [userId]="userId" [game]="gameOfPlayer" [player]="playerOfPlayer"></player>
         </div>
-        <div class="clearfix"></div>
-        <table [user]="user" [userId]="userId" [game]="game" [player]="player"></table>
-        <div class="user-area">
-            <player [user]="user" [userId]="userId" [game]="game" [player]="player"></player>
-        </div>
-    </div>
-    <div class="talking-area" appDraggable>
-        <div class="game-master-area">
-            <div class="master-message" appNotification>
-                {{masterMessage.text}}
-            </div>
-            <div class="master-image">
-                <img src='/assets/images/game-master.png' class="img-fluid "/>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+        <div class="talking-area col-lg-4 col-md-4 col-xs-4">
+            <master></master>
+            <div class="clearfix"></div>
         <chat [user]="user"></chat>
-    </div>
-    <div class="clearfix">
+        </div>
     </div>
 </div>
 <div class="out-area" *ngIf="endPoint.isToManyUsers()&&endPoint.socketIni">
     <p>Количество игроков превышает допустимое значение (6)!</p>
 </div>
 <div class="out-area" *ngIf="endPoint.isUserExist()&&endPoint.socketIni" (click)="toLoginPage()">
-    <p>Такой пользователь уже находится в игре!</p>
+    <p>Пользователь по имени {{user.username}} уже находится в игре!</p>
 </div>
 <div class="out-area" *ngIf="endPoint.isGameBegan()&&endPoint.socketIni">
     <p>Игра уже началась, ожидайте завершения игры!</p>

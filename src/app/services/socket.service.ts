@@ -10,7 +10,9 @@ export class SocketService {
     private socketIdStream: Subject<any> = new Subject<any>();
     private usersStream: Subject<any> = new Subject<any>();
     public chatMessageStream: Subject<any> = new Subject<any>();
-    public gameMessageStream: Subject<any> = new Subject<any>();
+    public masterMessageStream: Subject<any> = new Subject<any>();
+    public playerMessageStream: Subject<any> = new Subject<any>();
+    public tableMessageStream: Subject<any> = new Subject<any>();
     public userId: any;
     public socketIni: boolean = false;
     private userExist: boolean = true;
@@ -23,7 +25,9 @@ export class SocketService {
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
-        this.gameMessageStream = this.createStream('gameMessage_'.concat(username));
+        this.masterMessageStream = this.createStream('masterMessage_'.concat(username));
+        this.playerMessageStream = this.createStream('playerMessage_'.concat(username));
+        this.tableMessageStream = this.createStream('tableMessage_'.concat(username));
         this.socketIdStream.subscribe(data => {
             this.socket.emit('app connect', {
                 username: this.username,
@@ -43,6 +47,8 @@ export class SocketService {
                 u.username = element.username;
                 u.avatarImg = element.avatarImg;
                 u.isUser = (element.socketId === this.userId);
+                u.color = element.color;
+                u.no = element.no;
                 if (element.username === this.username && element.socketId === this.userId) {
                     if (element.token === "userExist") {
                         this.userExist = true;

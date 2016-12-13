@@ -42,10 +42,13 @@ var disconnection = function (observer, io) {
 }
 
 var disconnectUser = function (obj, io) {
+    if (usersMap.get(obj.socketId)) {
     if (usersMap.get(obj.socketId).token === "newUser") {
         gameService.removePlayer(io, obj.socketId);
     }
     usersMap = usersMap.delete(obj.socketId);
+    }
+
     if (usersMap.isEmpty()) {
         gameService.reset();
     } else {
@@ -75,7 +78,11 @@ var connectUser = function (obj, io) {
         }
         if (data["token"] === "newUser") {
             data["avatarImg"] = constants.Avatars.get(obj.data.username)
+
             gameService.addPlayer(io, obj.data.socketId, obj.data.username);
+            data["color"] = constants.Colors[gameService.players().get(obj.data.socketId).no];
+            data["no"] = gameService.players().get(obj.data.socketId).no
+
         }
     }
     usersMap = usersMap.set(obj.data.socketId, data);

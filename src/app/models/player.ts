@@ -7,4 +7,15 @@ export class Player {
     no: number;
     score: number;
     cards: Array<Card>;
+    status: string;
+
+    constructor() {
+        this.name = '';
+        this.active = false;
+        this.handActive = false;
+        this.tableActive = false;
+        this.no = 0;
+        this.score = 0;
+        this.status = '';
+    }
 }

@@ -3,56 +3,60 @@
         <div class="stick-nudlle">
             <img src='/assets/images/stick.png' class="img-fluid"/>
         </div>
-        <div class="player">
+        <div class="player" [style.background-color]="user.color">
             <div class="avat-image">
                 <img src={{user.avatarImg}} class="img-fluid"/>
             </div>
             <div>
-                {{user.username}}
+                {{user.username}} ({{game.scores[user.no]}})
             </div>
         </div>
     </div>
+
 </div>
 <div *ngIf="user.isUser">
     <div class="player-wrapper">
         <div class="stick-nudlle">
             <img src='/assets/images/stick.png' class="img-fluid"/>
         </div>
-        <div class="player" (click)="start()">
+        <div class="player" (click)="start()" [style.background-color]="user.color">
             <div class="avat-image">
                 <img src={{user.avatarImg}} class="img-fluid"/>
             </div>
             <div>
-                {{user.username}}
+                {{user.username}} ({{game.scores[user.no]}})
             </div>
         </div>
+
     </div>
     <div class="hand" appCarusel
          divImgClass=".hand-card-image"
          divArrowClass=".hand-arrow-image"
          askInputClass=".text-input"
          answerInputClass=".btn-input"
-         shift_X="-190px"
-         shift_Y="-280px"
+         shift_X="-12vw"
+         shift_Y="-20vw"
          perspective="1600px"
          radius="320"
          [isActive]="player.handActive"
-         [gamePhase]="game.phase">
-        <form name="form" (ngSubmit)="f.form.valid && send()" #f="ngForm" novalidate class="text-input">
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !text.valid }">
-                <textarea class="form-control" name="text" [(ngModel)]="message.text"
-                          #text="ngModel" required autocomplete="off"
-                          style="width: 160px; height: 64px; resize: none; outline: none; overflow: auto;
+         [playerStatus]="player.status">
+        <form name="form" (ngSubmit)="send()" #f="ngForm" novalidate class="text-input">
+            <div class="form-group">
+                <textarea class="form-control" name="msg" [(ngModel)]="message.text"
+                          #msg="ngModel" required autocomplete="off"
+                          style="width: 12vw; height: 6vw; resize: none; outline: none; overflow: auto;
                                         font-size: 100%; margin: 10px;">
                 </textarea>
             </div>
+
             <div class="form-group">
                 <button class="btn btn-black">Отправить</button>
             </div>
         </form>
         <form name="form" (ngSubmit)="send()" #f="ngForm" novalidate class="btn-input">
             <div class="form-group">
-                <button class="btn btn-black">Отправить</button>
+                <button class="btn btn-black" *ngIf="game.phase=='asking'">Свернуть</button>
+                <button class="btn btn-black" *ngIf="game.phase=='answering'">Отправить</button>
             </div>
         </form>
 

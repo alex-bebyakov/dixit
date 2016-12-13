@@ -1,24 +1,21 @@
 import {Component, OnInit, Input, OnChanges, ElementRef} from '@angular/core';
 
 import {Game} from "../../../../models/game";
-import {Player} from "../../../../models/player";
 import {User} from "../../../../models/user";
-
-declare var $: any;
+import {Player} from "../../../../models/player";
 
 @Component({
     selector: 'table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, OnChanges {
+export class TableComponent implements OnInit {
     @Input() user: User;
-    @Input() player: Player
-    @Input() game: Game
     @Input() userId: string
+    @Input() game: Game
+    @Input() player: Player
 
-
-    constructor(private el: ElementRef) {
+    constructor() {
 
     }
 
@@ -26,17 +23,10 @@ export class TableComponent implements OnInit, OnChanges {
 
     }
 
-    ngOnChanges():void {
-        if (this.game.phase === 'finishing') {
-            /*let items = $(".selectable").children('.table-card-image')
-            console.log(items)
-            for (var i = 0; i < items.length; i++) {
-                $(items[i]).css({
-                    'width': '124px'
 
-                });
-            }*/
-
+    setTransform(isOff) {
+        if (isOff) {
+            return 'scale(1.3)'
         }
     }
 }

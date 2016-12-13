@@ -3,42 +3,34 @@
   vertical-align: middle;
   margin-top: 75px;
   margin-bottom: 30px;
-  margin-left: 15px;
+  margin-left: 5px;
   padding-left: 15px;
-  font-family: cursive;
-  font-style: oblique;
 }
 
 .playing-area {
   float: left;
   display: inline-block;
   margin-right: 5px;
-  width: 760px;
+  margin-left: 5px;
+  height: 90vh;
 }
 
-.player-dummy {
-  height: 150px;
-  float: left;
-  display: inline-block;
+.players {
+  width: 57vw;
+  height: 10vw;
 }
 
 .talking-area {
-  height: 560px;
-  width: 420px;
   float: left;
   display: inline-block;
-  margin-top: 20px;
-  border-radius: 10px;
-  background-image: url('/assets/images/chat-texture.jpg');
-}
+  height: 100vh;
 
-.user-area {
-  margin-top: 20px;
 }
 
 .out-area {
   height: 100vh;
 }
+
 
 p {
   background-color: darkorange;
@@ -48,30 +40,9 @@ p {
   margin: 250px auto;
 }
 
-.game-master-area {
-  height: 100px;
-  margin-top: 20px;
-  overflow: hidden;
-}
-
-.master-image {
-  overflow: hidden;
-  width: 104px;
-  height: 89px;
-}
-
-.master-message {
-  width: 270px;
-  background-color: lightgreen;
-  padding: 5px;
-  border: solid 1px darkgreen;
-  border-radius: 10px;
-  height: 60px;
-  margin: 0 10px;
-  opacity: 0;
-  transform-style: preserve-3d;
-  transform-origin: 50% 50%;
+.player-dummy {
+  width: 9.4vw;
+  height: 8.5vw;
   float: left;
   display: inline-block;
 }
-

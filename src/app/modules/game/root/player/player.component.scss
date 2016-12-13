@@ -1,13 +1,14 @@
 .avat-image {
   overflow: hidden;
-  height: 84px;
+  height: 6vw;
 
 }
 
+
 .hand-card-image {
   overflow: hidden;
-  height: 117.5px;
-  width: 78.5px;
+  height: 9vw;
+  width: 6vw;
   float: left;
   display: inline-block;
   margin-left: 15px;
@@ -22,37 +23,44 @@
 
 }
 
-.form-control{
+.form-control {
   width: 100px;
 }
+
 .btn-black {
-  background-color:#696969;
-  color:#FFFFFF;
-  border-color:#292929;
+  background-color: #696969;
+  color: #FFFFFF;
+  border-color: #292929;
 }
+
 .btn-black:hover, .btn-black:focus {
   background-color: #3b3b3b;
   color: #FFFFFF;
 }
+
 .btn-black:active {
   background-color: #3b3b3b;
   color: #FFFFFF;
 }
 
-.text-input,.btn-input{
+.text-input, .btn-input {
   display: none;
 }
 
 .player-wrapper {
-  width: 120px;
-  margin: 0 2px 2px 2px;
+
+  width: 9vw;
   border-radius: 0.5em;
-  color: darkred;
-  background-image: url('/assets/images/player-texture.jpg');
+  color: black;
   font-style: oblique;
   font-size: 18pt;
   padding: 5px 10px 15px 10px;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
+  background-image: url('/assets/images/backgrounds/chat.png');
   float: left;
   display: inline-block;
 
@@ -74,9 +82,7 @@
 
 .player {
   position: relative;
-  border: 1px solid darkgoldenrod;
-  background-color: #fff;
-  padding: 5px 5px 0 5px;
+  padding: 5px 10px 0 10px;
   z-index: 1;
   border-radius: 0.25em;
   font-size: 12pt;

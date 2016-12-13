@@ -10,50 +10,39 @@ export class CaruselService {
     private arrows: any
     private imgClass: string
     private arrowClass: string
-    private askInputClass:string
-    private answerInputClass:string
+    private askInputClass: string
+    private answerInputClass: string
     private dx: string
     private dy: string
     private perspective: string
     private radius: number
     private position: number = 0;
-    private isActive: boolean = false;
-    private card:Card
+    private _isActive: boolean = false;
+    private card: Card
+
     constructor() {
 
     }
 
-    init(el: ElementRef){
-        let attributes: string[]=['divImgClass', 'divArrowClass', 'askInputClass', 'answerInputClass', 'shift_X', 'shift_Y', 'perspective', 'radius']
+    initialize(el: ElementRef, attrs: string[]) {
         this.element = $(el.nativeElement);
-        this.imgClass = this.element.attr(attributes[0]);
-        this.arrowClass = this.element.attr(attributes[1]);
-        this.askInputClass= this.element.attr(attributes[2]);
-        this.answerInputClass= this.element.attr(attributes[3]);
-        this.dx = this.element.attr(attributes[4]);
-        this.dy = this.element.attr(attributes[5]);
-        this.perspective = this.element.attr(attributes[6]);
-        this.radius = parseInt(this.element.attr(attributes[7]));
-        this.card=new Card()
+
+        this.imgClass = this.element.attr(attrs[0]);
+        this.arrowClass = this.element.attr(attrs[1]);
+        this.askInputClass = this.element.attr(attrs[2]);
+        this.answerInputClass = this.element.attr(attrs[3]);
+        this.dx = this.element.attr(attrs[4]);
+        this.dy = this.element.attr(attrs[5]);
+        this.perspective = this.element.attr(attrs[6]);
+        this.radius = parseInt(this.element.attr(attrs[7]));
+        this.card = new Card()
     }
 
-    getActive(){
-        return this.isActive;
-    }
-    rotate(isTurnLeft: boolean): any {
-        this.position = this.animateImgs(this.imgs, this.position, this.radius, isTurnLeft)
-        if(this.position<0){
-            this.card.img=$(this.imgs[-this.position]).children('.img-fluid').attr('src');
+    activate(activationType: boolean): any {
 
-        }else if(this.position>0){
-            this.card.img=$(this.imgs[6-this.position]).children('.img-fluid').attr('src');
-        }else {
-            this.card.img=$(this.imgs[this.position]).children('.img-fluid').attr('src');
-        }
-
-    }
-
-    activate(activationType:boolean): any {
+        this.radius = this.element.width() / 2
+        this.dx = '-10vw';
+        this.dy = '-20vw'
         this.imgs = this.element.children(this.imgClass)
         this.arrows = this.element.children(this.arrowClass)
         this.element.css({
@@ -64,17 +53,17 @@ export class CaruselService {
         for (let i = 0; i < 6; i++) {
             $(this.imgs[i]).css({
                 'position': 'absolute',
-                'height': '177px',
-                'width': '119px'
+                'height': '12vw',
+                'width': '8vw'
             })
         }
         for (let i = 0; i < 2; i++) {
             let shift = 0
             if ($(this.arrows[i]).attr("type") === 'left') {
-                shift = 225
+                shift = 25
                 $(this.arrows[i]).children('.img-fluid').attr("src", 'assets/images/left_arrow.png')
             } else {
-                shift = 745
+                shift = 46.5
                 $(this.arrows[i]).children('.img-fluid').attr("src", 'assets/images/right_arrow.png')
             }
             $(this.arrows[i]).css({
@@ -82,31 +71,31 @@ export class CaruselService {
                 'position': 'absolute',
                 'height': '38px',
                 'width': '38px',
-                'transform': ' translate(' + shift + 'px,200px)',
+                'transform': ' translate(' + shift + 'vw,15vw)',
                 'opacity': '1'
             })
         }
-        if(activationType){
+        if (activationType) {
             $(this.askInputClass).css({
                 'display': 'block',
                 'position': 'absolute',
-                'transform': ' translate(' + 720 + 'px,280px)',
-                'background-image':"url('assets/images/player-texture.jpg')",
+                'transform': ' translate(48vw,20vw)',
+                'background-image': "url('assets/images/backgrounds/chat.png')",
                 'border-radius': '0.5em',
                 'opacity': '1'
             })
-        }else{
+        } else {
             $(this.answerInputClass).css({
                 'display': 'block',
                 'position': 'absolute',
-                'transform': ' translate(' + 720 + 'px,300px)',
+                'transform': ' translate(48vw,21vw)',
                 'opacity': '1'
             })
         }
 
-
-        this.isActive=true;
-        this.card.asking=activationType;
+        console.log(this.element.width())
+        this._isActive = true;
+        this.card.asking = activationType;
     }
 
     deactivate(): void {
@@ -114,8 +103,8 @@ export class CaruselService {
             $(this.imgs[i]).css({
                 'position': 'relative',
                 'transform': 'scale(1)',
-                'height': '118px',
-                'width': '79px'
+                'height': '9vw',
+                'width': '6vw'
             })
         }
         this.element.css({
@@ -135,14 +124,29 @@ export class CaruselService {
             'transform': 'translate(0px, 0px)',
             'display': 'none'
         })
-        this.isActive=false;
-        this.position=0;
+        this._isActive = false;
+    }
+
+    animate(isTurnLeft: boolean): any {
+        this.position = this.animateImgs(this.imgs, this.position, this.radius, isTurnLeft)
+        if (this.position < 0) {
+            this.card.img = $(this.imgs[-this.position]).children('.img-fluid').attr('src');
+
+        } else if (this.position > 0) {
+            this.card.img = $(this.imgs[6 - this.position]).children('.img-fluid').attr('src');
+        } else {
+            this.card.img = $(this.imgs[this.position]).children('.img-fluid').attr('src');
+        }
 
     }
+
+    isActive(): boolean {
+        return this._isActive;
+    }
+
     getCard(): Card {
         return this.card;
     }
-
 
     private animateImg = function (img: any, position: number, radius: number, isLeftTurn: boolean): any {
         let turn = 1;

@@ -11,7 +11,15 @@
                         {{message.username}}
                     </div>
                 </div>
-                <div class="msg-content-container">
+                <div *ngIf="message.username!='Master'" class="msg-content-container">
+                    <div class="msg-text">
+                        {{message.text}}
+                    </div>
+                    <div class="msg-time">
+                        {{message.sentAt}}
+                    </div>
+                </div>
+                <div *ngIf="message.username=='Master'" class="msg-content-container-master">
                     <div class="msg-text">
                         {{message.text}}
                     </div>

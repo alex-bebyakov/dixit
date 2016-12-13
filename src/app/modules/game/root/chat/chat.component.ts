@@ -6,7 +6,6 @@ import {MessageService} from "../../../../services/message.service";
 import {Subject} from "rxjs";
 import {Http} from "@angular/http";
 import {User} from "../../../../models/user";
-
 @Component({
     selector: 'chat',
     templateUrl: './chat.component.html',
@@ -29,6 +28,7 @@ export class ChatComponent implements OnInit {
         this.chat.messages.subscribe(this.messages);
         this.messages.subscribe(
             (messages: Array<ChatMessage>) => {
+
                 setTimeout(() => {
                     this.scrollToBottom();
                 });

@@ -1,6 +1,5 @@
-
-import {Message} from "./message";
-export class ChatMessage implements Message{
+import {IMessage} from "../interfaces/message";
+export class ChatMessage implements IMessage {
   username: string;
   sentAt: Date;
   text: string;

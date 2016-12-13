@@ -1,14 +1,25 @@
 <div class="table">
-    <div isDisactivate="true" [isActive]="player.tableActive" appSelectable [user]="user" [userId]="userId">
-        <div *ngFor="let card of game.cards" class="table-card-image">
-            <img src={{card.img}} class="img-fluid "/>
+    <div class="table-root" isDisactivate="true" [isActive]="player.tableActive" appSelectable [user]="user"
+         [userId]="userId">
+        <div *ngFor="let card of game.cards" class="table-card" [style.transform]="setTransform(card.asking)">
+            <div class="table-card-image">
+                <img src={{card.img}} class="img-fluid "/>
+            </div>
+
+            <div class="table-card-label" *ngIf="game.phase=='finishing'" [style.background-color]="card.color">
+                {{game.playersNames[card.playerN]}}, +{{game.roundScores[card.playerN]}}
+            </div>
         </div>
         <div class="clearfix"></div>
-        <!--div class="table-card-selection-wrapper"-->
-            <div *ngFor="let selection of game.selections" class="table-card-selection-image">
+        <div *ngFor="let selection of game.selections" class="table-card-selection">
+            <div class="table-card-selection-image">
                 <img src={{selection.img}} class="img-fluid "/>
-            <!--/div-->
+            </div>
+            <div *ngIf="game.phase=='finishing'">
+                <div *ngIf="game.cards[selection.no].asking==true" class="table-score">
+                    <img src='/assets/images/smile.png' class="img-fluid "/>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>

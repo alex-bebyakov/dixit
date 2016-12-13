@@ -7,8 +7,9 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {AuthGuard} from "../../services/guard.service";
 import {MessageService} from "../../services/message.service";
 import {SocketService} from "../../services/socket.service";
-import {GameService} from "../../services/game.service";
 import {CaruselService} from "../../services/carusel.service";
+import {SelectableService} from "../../services/selectable.service";
+import {GameService} from "../../services/game.service";
 
 
 
@@ -23,7 +24,7 @@ import {CaruselService} from "../../services/carusel.service";
   exports: [CommonModule],
 
   providers: [
-      AuthGuard, MessageService, AuthenticationService, SocketService, GameService, CaruselService
+      AuthGuard, MessageService, AuthenticationService, SocketService, CaruselService, SelectableService, GameService
   ]
 })
 export class GameModule {

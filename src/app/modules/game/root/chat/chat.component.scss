@@ -3,25 +3,24 @@
 }
 
 .msg-text {
-  word-break: break-all;
-  font-size: 12pt;
+  font-size: 10pt;
   text-align: left;
-
+  word-break: break-all;
 }
 
 .msg-time {
-  font-size: 8pt;
+  font-size: 6pt;
   text-align: right;
   color: darkred;
 }
 
 .msg-container-base {
-  height: 360px;
-  border: 1px solid darkred;
-  border-radius: 3px;
+  height: 60vh;
+  border-radius: 5px;
   padding: 10px;
   overflow: hidden;
   overflow-y: scroll;
+  background-color: ghostwhite;
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -31,24 +30,23 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #e74c3c;
+    background: darkgoldenrod;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   }
   &::-webkit-scrollbar-thumb:window-inactive {
-    background: #e74c3c;
+    background: darkgoldenrod;
   }
 }
 
 .msg-container {
   position: relative;
-
   overflow: hidden;
   display: flex;
 
 }
 
 .msg-user-container {
-  color: darkred;
+  color: black;
   font-size: 10pt;
   width: 48px;
   float: left;
@@ -56,25 +54,62 @@
 
 }
 
-.msg-content-container {
-
+.msg-content-container, .msg-content-container-master {
+  padding: 0 5px 0 5px;
+  position: relative;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
   float: left;
   display: inline-block;
-  width: 320px;
-  margin: 2px 0 0 10px;
+  margin: 5px 0 15px 15px;
+}
 
+.msg-content-container {
+  background-color: lightblue;
+}
+
+.msg-content-container-master {
+  background-color: #ffdacd;
+}
+
+.msg-content-container:before, .msg-content-container-master:before {
+  content: '';
+  width: 0;
+  height: 0;
+  right: 100%;
+  top: 20px;
+  position: absolute;
+  border-bottom: 12px solid transparent;
+}
+
+.msg-content-container:before {
+  border-right: 12px solid lightblue;
+}
+
+.msg-content-container-master:before {
+  border-right: 12px solid #ffdacd;
 }
 
 .chat-container {
   margin: 15px;
+  border-radius: 10px;
 
+  padding: 15px 10px 5px 10px;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: 0.4em 0.4em 5px rgba(122, 122, 122, 0.5);
+  background-image: url('/assets/images/backgrounds/chat.png');
 }
 
 .form-group {
   margin-top: 10px;
-  border: 1px solid darkred;
+  border-radius: 5px;
+  height: 40px;
+  background-color: ghostwhite;
 
-  border-radius: 3px;
 }
 
 .form-control, :focus {
@@ -84,3 +119,4 @@
   outline: none;
 
 }
+
