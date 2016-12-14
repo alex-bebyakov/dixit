@@ -21,7 +21,7 @@ export class SocketService {
 
     constructor(private username: string) {
 
-        this.socket = new io('http://localhost:5002');
+        this.socket = new io('http://dixit-mean.herokuapp.com:5002');
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
