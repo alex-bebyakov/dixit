@@ -20,8 +20,8 @@ export class SocketService {
     private gameBegan: boolean = false;
 
     constructor(private username: string) {
-
-        this.socket = new io('http://dixit-mean.herokuapp.com:5002');
+        let port=process.env.PORT || 5002
+        this.socket = new io('http://dixit-mean.herokuapp.com:'+port.toString());
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
