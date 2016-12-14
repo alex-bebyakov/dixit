@@ -46986,7 +46986,8 @@ var SocketService = (function () {
         this.userExist = true;
         this.toManyUsers = false;
         this.gameBegan = false;
-        this.socket = new io('http://dixit-mean.herokuapp.com:5002');
+        this.socket = new io('http://dixit-mean.herokuapp.com:' + expressPort.toString());
+        console.log(expressPort);
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
