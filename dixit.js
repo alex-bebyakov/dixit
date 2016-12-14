@@ -4,6 +4,7 @@ var port = process.env.PORT || 5002;
 
 var server = app.listen(port, function() {
   console.log("Listening on " + port);
+  console.log(__dirname);
 });
 
 var io = require('socket.io')(server);
