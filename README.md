@@ -1,4 +1,4 @@
-**[DEMO]**(https://dixit-demo.herokuapp.com/game)
+[DEMO](https://dixit-demo.herokuapp.com/game)
 
 ## Имена пользователей
 
