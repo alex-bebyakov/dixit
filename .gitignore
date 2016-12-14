@@ -1,8 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/client/assets/images/cards
-/client/assets/images/numbers
+/client
 /tmp
 /src/assets/images/cards
 /src/assets/images/numbers

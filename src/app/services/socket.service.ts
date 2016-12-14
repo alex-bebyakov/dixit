@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, Subject} from "rxjs"
 import {User} from "../models/user";
+import {Location} from "@angular/common";
 declare var io: any;
 @Injectable()
 export class SocketService {
@@ -19,8 +20,7 @@ export class SocketService {
     private gameBegan: boolean = false;
 
     constructor(private username: string) {
-        this.socket = new io('http://dixit-mean.herokuapp.com');
-
+        this.socket = new io('http://'+window.location.hostname+':'+window.location.port);
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');

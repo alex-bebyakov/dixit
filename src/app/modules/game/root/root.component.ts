@@ -3,6 +3,7 @@ import {MessageService} from "../../../services/message.service";
 import {Observable} from "rxjs";
 import {SocketService} from "../../../services/socket.service";
 import {Router} from "@angular/router";
+import {Location} from "@angular/common";
 import {User} from "../../../models/user";
 import {GameMessage} from "../../../models/game.message";
 import {Http} from "@angular/http";
@@ -14,6 +15,7 @@ import {SelectableService} from "../../../services/selectable.service";
 import {MasterComponent} from "./master/master.component";
 import {CaruselService} from "../../../services/carusel.service";
 import {PlayerComponent} from "./player/player.component";
+import {LocationStrategy} from "@angular/common";
 
 declare var $: any;
 
