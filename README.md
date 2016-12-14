@@ -19,3 +19,4 @@ http://localhost:5002
 ## Имена пользователей
 
 Alex, Rocket, DeBook, TimOFey, Batux, Groove
+"# dixit-demo" 
