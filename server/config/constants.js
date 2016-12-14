@@ -8,7 +8,6 @@ exports.Avatars = require('immutable').Map({
     Doggy: "assets/images/doggy.jpg",
     Batux: "assets/images/batux.jpg",
     Groove: "assets/images/groove.jpg"
-    
 });
 
 exports.Colors = ['#e5e4e2', '#318e5f', '#ce2c27', '#4974a7', '#d1c734', '#c23371']

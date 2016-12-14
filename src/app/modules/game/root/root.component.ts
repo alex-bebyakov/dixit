@@ -94,17 +94,15 @@ export class RootComponent implements OnInit {
         })
 
         this.endPoint.users.subscribe(users=> {
-            if (!this.userIni) {
-                users.forEach(user=> {
-                    if (user.isUser) {
-                        this.userIni = true;
-                        this.user = user;
-                        this.userId = this.endPoint.userId;
+            users.forEach(user=> {
+                if (user.isUser) {
+                    this.userIni = true;
+                    this.user = user;
+                    this.userId = this.endPoint.userId;
 
-                    }
+                }
 
-                })
-            }
+            })
         })
     }
 

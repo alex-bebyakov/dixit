@@ -1,20 +1,22 @@
 var Immutable = require('immutable')
 var utils = require('../utils')
-
+var messageService = require('../services/message.service');
 var Player = require('../models/player')
 var Card = require('../models/card')
 var Game = require('../models/game')
 var Selection = require('../models/selection')
-const MAX_SCORE = 10
-const DECK_AMOUNT = 84
+const MAX_SCORE = 30
+const DECK_AMOUNT = 168
 const CLOSE_CARD_IMG = 'assets/images/cards/card_.png'
 var playerNo = 0;
 var game = new Game('starting', 'asking', '', []);
 var players = Immutable.Map({});
 var deck = [];
-var players_list = [];
+
 var cards_list = Immutable.Map({});
 var positions = Immutable.Map({});
+
+var players_list =  Immutable.Map({});
 var oldPhase = '';
 var closeCard = new Card(CLOSE_CARD_IMG, false)
 var finishCommands = 0
@@ -24,6 +26,7 @@ var tempSelections = []
 var tempDeck = []
 
 var gameTick = function (data) {
+
     var player = players.get(data._userId)
     players = players.delete(data._userId)
     if (deck.length === 0) {
@@ -141,6 +144,9 @@ var gameTick = function (data) {
             }
         }
     }
+    console.log('game-service: ')
+    console.log('_username: '+data._username+', _command: '+data._command+', _userId: '+data._userId+', _text: '+data._text+', _card: '+data._card)
+    console.log()
 }
 
 var fillDeck = function (amount) {
@@ -250,6 +256,7 @@ var updateScores = function () {
 
 
     }
+
     positions = utils.getPositions(players)
 }
 
@@ -268,7 +275,7 @@ var startGame = function () {
             game.id = utils.createRandomId(7)
             utils.dealCards(deck, players, 6);
             players.forEach(function (value, key) {
-                players_list.push(value.name);
+
                 if (value.active) {
                     value.active = false;
                     value.status = "asker"
@@ -276,6 +283,7 @@ var startGame = function () {
                     value.status = "answer"
                 }
                 value.handActive = true;
+                players_list=players_list.set(key,value)
             })
 
         }
@@ -318,7 +326,7 @@ var newGame = function () {
         value.handActive = false
         value.tableActive = false
     })
-    players_list = [];
+    players_list =  Immutable.Map({});
     game.cards = []
     game.selections = []
     game.scores = [];
@@ -328,33 +336,46 @@ var newGame = function () {
 
 module.exports = {
     addPlayer: function (io, id, name) {
-        var player = new Player({});
-        player.name = name;
-        player.no = playerNo;
-        player.score = 0;
-        player.cards = []
-        player.handActive = false;
-        player.tableActive = false;
-        player.selectImg = ''
-        player.selectNum = 0
-        if (0 === playerNo) {
-            player.active = true;
-        } else {
-            player.active = false;
-        }
-        for (var i = 0; i < players_list.length; i++) {
-            if (name === players_list[i] && game.status === 'playing') {
-                player.cards = utils.dealCardsForPlayer(deck, 6);
+        var reEnter=false
+        players_list.forEach(function (value, key) {
+            if (name ===value.name && game.status === 'playing') {
+                players = players.set(id, value)
+                players.get(id).card = utils.dealCardsForPlayer(deck, 6);
+                var data=[]
+                data["_username"]=name
+                data["_command"]='ReEnter'
+                data["_userId"]=id
+                messageService.send(io, data, players, game,oldPhase)
+                reEnter=true
             }
+        })
+        if(!reEnter){
+            var player = new Player({});
+            player.name = name;
+            player.no = playerNo;
+            player.score = 0;
+            player.cards = []
+            player.handActive = false;
+            player.tableActive = false;
+            player.selectImg = ''
+            player.selectNum = 0
+            if (0 === playerNo) {
+                player.active = true;
+            } else {
+                player.active = false;
+            }
+            players = players.set(id, player)
+            game.playersNames[playerNo] = name
+            playerNo++;
         }
-        players = players.set(id, player)
-        game.playersNames[playerNo] = name
-        playerNo++;
+
+
+
+
     },
     removePlayer: function (io, id) {
         var player = players.get(id)
         var removedPlayerNumber = player.no;
-        var isRemovedPlayerActive = player.active;
         returnCardsToDeck(player.cards);
         players = players.delete(id);
         playerNo--;
@@ -362,13 +383,20 @@ module.exports = {
             if (value.no > removedPlayerNumber) {
                 value.no = value.no - 1
             }
-            if (isRemovedPlayerActive) {
-                value.active = true
-                isRemovedPlayerActive = false
-            }
+           if(value.no===0){
+                value.active=true;
+           }
             players = players.set(key, value)
 
         })
+
+
+
+        var data=[]
+        data["_username"]=player.name
+        data["_command"]='Remove'
+        data["_userId"]=id
+        messageService.send(io, data, players, game,oldPhase)
     },
     update: function (data) {
         if (game.status === 'starting') {
@@ -391,15 +419,16 @@ module.exports = {
         return players;
     },
     positions: function () {
-        return positions
+        return positions;
     },
     isPlayerWasInGame: function (name) {
-        for (var i = 0; i < players_list.length; i++) {
-            if (name === players_list[i]) {
-                return true;
+        var result =false
+        players_list.forEach(function (value, key) {
+            if (name ===value.name && game.status === 'playing') {
+                result =true;
             }
-        }
-        return false;
+        })
+        return result;
     },
     oldPhase: function () {
         return oldPhase

@@ -1,4 +1,4 @@
-utils = require('../utils')
+var utils = require('../utils');
 var gameService = require('../services/game.service');
 var chatText = '';
 var masterText = '';
@@ -147,9 +147,10 @@ var finishRound = function (phase, players, username, userId, isGameOver) {
     tableMsgType = 1
     isChatMsg = true
     if (isGameOver) {
-        chatText = 'Игрок ' + username + ' завершил игру ' + utils.getPosition(gameService.positions().get(userId))
+        chatText = 'Игрок ' + username + ' завершил игру ';// + utils.getPosition(gameService.positions().get(userId))
     } else {
-        chatText = 'Игрок ' + username + ' завершил раунд ' + utils.getPosition(gameService.positions().get(userId))
+
+        chatText = 'Игрок ' + username + ' завершил раунд ';// + utils.getPosition(gameService.positions().get(userId))
     }
 
     if (phase === 'asking') {
@@ -203,6 +204,14 @@ var update = function (data, players, game, oldPhase) {
                 finishRound(oldPhase, players, players.get(data._userId).name, data._userId, true)
             }
 
+            break;
+        case 'ReEnter':
+            playerMsgType = 0
+            tableMsgType = 0
+            break;
+        case 'Remove':
+            playerMsgType = 1
+            tableMsgType = 1
             break;
         default:
     }

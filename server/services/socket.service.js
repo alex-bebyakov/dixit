@@ -43,10 +43,17 @@ var disconnection = function (observer, io) {
 
 var disconnectUser = function (obj, io) {
     if (usersMap.get(obj.socketId)) {
-    if (usersMap.get(obj.socketId).token === "newUser") {
-        gameService.removePlayer(io, obj.socketId);
-    }
-    usersMap = usersMap.delete(obj.socketId);
+        if (usersMap.get(obj.socketId).token === "newUser") {
+            gameService.removePlayer(io, obj.socketId);
+        }
+        usersMap = usersMap.delete(obj.socketId);
+        usersMap.forEach(function (value, key) {
+            var data=value;
+            data["no"]=gameService.players().get(key).no
+            data["color"] = constants.Colors[gameService.players().get(key).no];
+            usersMap=usersMap.set(key,data)
+            console.log(data)
+        })
     }
 
     if (usersMap.isEmpty()) {
@@ -54,10 +61,15 @@ var disconnectUser = function (obj, io) {
     } else {
         io.emit('usersMap', usersMap.toArray());
     }
+    console.log('soket-service, disconnect: ')
+    console.log(obj.socketId)
+    console.log()
+
 }
 
 var connectUser = function (obj, io) {
     var data = obj.data;
+
     data["token"] = "newUser";
     if (usersMap.size > 5) {
         data["token"] = "toManyUsers";
@@ -75,6 +87,8 @@ var connectUser = function (obj, io) {
             if (!gameService.isPlayerWasInGame(obj.data.username)) {
                 data["token"] = "gameBegan";
             }
+            console.log( data["token"])
+            console.log(gameService.isPlayerWasInGame(obj.data.username))
         }
         if (data["token"] === "newUser") {
             data["avatarImg"] = constants.Avatars.get(obj.data.username)
@@ -87,4 +101,7 @@ var connectUser = function (obj, io) {
     }
     usersMap = usersMap.set(obj.data.socketId, data);
     io.emit('usersMap', usersMap.toArray());
+    console.log('soket-service, connect: ')
+    console.log('username: '+data.username+', socketId: '+data.socketId+', token: '+data.token+', avatarImg: '+data.avatarImg+', color: '+data.color+', no: '+data.no)
+    console.log()
 }

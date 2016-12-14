@@ -14,7 +14,6 @@ export class TableComponent implements OnInit {
     @Input() userId: string
     @Input() game: Game
     @Input() player: Player
-
     constructor() {
 
     }
