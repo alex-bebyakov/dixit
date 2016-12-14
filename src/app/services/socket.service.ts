@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {Observable, Subject} from "rxjs"
 import {User} from "../models/user";
 declare var io: any;
-declare var expressPort:any
 @Injectable()
 export class SocketService {
     private socket: any;
@@ -20,8 +19,8 @@ export class SocketService {
     private gameBegan: boolean = false;
 
     constructor(private username: string) {
-        this.socket = new io('http://dixit-mean.herokuapp.com:'+expressPort.toString());
-        console.log(expressPort)
+        this.socket = new io('http://dixit-mean.herokuapp.com');
+
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');
