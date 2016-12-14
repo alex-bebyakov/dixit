@@ -1,5 +1,5 @@
-#[DEMO](https://dixit-demo.herokuapp.com/game)
+#[DEMO](https://dixit-demo.herokuapp.com)
 
 ## Имена пользователей
-Alex, Rocket, DeBook, TimOFey, Batux, Groove
+Rocket, DeBook, TimOFey, Batux, Groove, Doggy
 
