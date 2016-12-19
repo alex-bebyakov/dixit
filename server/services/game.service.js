@@ -129,9 +129,9 @@ var gameTick = function (data) {
             finishCommands++;
             if (finishCommands === players.size) {
                 if (game.status === 'over') {
-                    resetRound(true)
+                    resetRound(true,false)
                 } else {
-                    resetRound(false)
+                    resetRound(false,false)
                 }
             }
         }
@@ -151,7 +151,7 @@ var fillDeck = function (amount) {
     return deck;
 };
 
-var resetRound = function (isGameOver) {
+var resetRound = function (isGameOver,isPlayerExit) {
     finishCommands = 0
     if(!waitingPlayers.isEmpty()){
         waitingPlayers.forEach(function (value, key) {
@@ -164,10 +164,16 @@ var resetRound = function (isGameOver) {
     if (isGameOver) {
         newGame()
     } else {
-        lastAskPlayerNo++;
+		if(isPlayerExit){
+		lastAskPlayerNo = 0;
+		}
+		else{
+		lastAskPlayerNo++;
         if (lastAskPlayerNo > players.size - 1) {
             lastAskPlayerNo = 0;
         }
+		}
+        
         game.cards = []
         game.selections = []
         game.roundScores = []
@@ -363,6 +369,7 @@ module.exports = {
             var removedPlayerNumber = player.no;
             returnCardsToDeck(player.cards);
             players = players.delete(id);
+			console.log(players.size)
             players.forEach(function (value, key) {
                 if (value.no > removedPlayerNumber) {
                     value.no = value.no - 1
@@ -381,11 +388,11 @@ module.exports = {
             if(game.status==='playing'){
                 data["_userId"] = id
                 if(players.size<3){
-                    resetRound(true)
+                    resetRound(true,true)
                     data["_command"] = 'ResetGame'
                 }
                 else{
-                    resetRound(false)
+                    resetRound(false,true)
                     data["_command"] = 'ResetRound'
                 }
             }
@@ -449,3 +456,6 @@ module.exports = {
         return oldPhase
     }
 }
+
+
+  

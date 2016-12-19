@@ -86,7 +86,6 @@ var connectUser = function (obj, io) {
         })
     }
     if (data["token"] === "newUser") {
-        if (data["token"] === "newUser") {
             data["avatarImg"] = constants.Avatars.get(obj.data.username)
             gameService.addPlayer(io, obj.data.socketId, obj.data.username);
             if(gameService.players().get(obj.data.socketId)){
@@ -97,8 +96,7 @@ var connectUser = function (obj, io) {
                 data["color"] = constants.Colors[gameService.waitingPlayers().get(obj.data.socketId).no];
                 data["no"] = gameService.waitingPlayers().get(obj.data.socketId).no
             }
-        }
-    }
+     }
     usersMap = usersMap.set(obj.data.socketId, data);
     io.emit('usersMap', usersMap.toArray());
     console.log('soket-service, connect: ')

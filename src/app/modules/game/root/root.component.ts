@@ -3,7 +3,6 @@ import {MessageService} from "../../../services/message.service";
 import {Observable} from "rxjs";
 import {SocketService} from "../../../services/socket.service";
 import {Router} from "@angular/router";
-import {Location} from "@angular/common";
 import {User} from "../../../models/user";
 import {GameMessage} from "../../../models/game.message";
 import {Http} from "@angular/http";
@@ -83,12 +82,12 @@ export class RootComponent implements OnInit {
                 this.selectableService.setWasActivated(false)
                 for (let i = 0; i <data.game.playersNames.length; i++) {
                     this.mipple_dx[i]=data.game.scores[i]*20
-                    let dx=this.mipple_dx[i]+40
+                    let dx=this.mipple_dx[i]
                     let cl='.mipple_'
                         .concat(i.toString())
                         .concat('-image')
                     $(cl).css({
-                        'transform':'translate(40px,0px)'
+                        'transform':'translate(0px,0px)'
                     })
                     $(cl).css({
                         'transform':'translate(' + dx + 'px,0px)'
@@ -127,6 +126,15 @@ export class RootComponent implements OnInit {
                     this.userId = this.endPoint.userId;
                 }
             })
+            for (let i = 0; i <6; i++) {
+                let cl='.mipple_'
+                    .concat(i.toString())
+                    .concat('-image')
+                if( $(cl)[0]){
+                    $(cl)[0].remove()
+                }
+
+            }
             for (let i = 0; i <users.length; i++) {
                 let element='<div class="mipple_'
                     .concat(i.toString())
@@ -134,11 +142,8 @@ export class RootComponent implements OnInit {
                     .concat('mipple_')
                     .concat(i.toString())
                     .concat('.png" class="img-fluid"/> </div>')
-                let cl='.mipple_'
-                    .concat(i.toString())
-                    .concat('-image')
-                $(cl).remove()
-                let dx=this.mipple_dx[i]+40
+
+                let dx=this.mipple_dx[i]
                 $(element).appendTo('.navbar-fixed-top').css({
                     'overflow': 'hidden',
                     'margin-top':'5px',
@@ -150,8 +155,9 @@ export class RootComponent implements OnInit {
                     'transform':'translate(' + dx + 'px,0px)'
                 })
             }
-            let element='<div class="finish-flag"> <img src="assets/images/finish.png" class="img-fluid"/> </div>'
             $('.finish-flag').remove()
+            let element='<div class="finish-flag"> <img src="assets/images/finish.png" class="img-fluid"/> </div>'
+
             $(element).appendTo('.navbar-fixed-top').css({
                 'overflow': 'hidden',
                 'margin-top':'5px',
