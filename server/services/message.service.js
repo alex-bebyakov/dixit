@@ -93,7 +93,6 @@ var sendMsg = function (io, players, game, userId) {
     sendMasterMsg(io, players, masterMsgType, userId)
     sendGameMsg(io, players, game, playerMsgType, true, userId)
     sendGameMsg(io, players, game, tableMsgType, false, userId)
-
 }
 
 var greetings = function (username) {
@@ -126,14 +125,16 @@ var sendCard = function (phase, msg, username) {
         tableMsgType = 1
         assosiation = msg
         masterText = 'Игрок ' + username + ' загадал карту: "' + assosiation + ' "'
-    } else {
+    }
+    else {
         if (phase === 'selecting') {
             playerMsgType = 1
-
         } else {
             playerMsgType = 0
         }
         tableMsgType = 1
+        isChatMsg=true
+        chatText='Игрок ' + username + ' сделал ход.'
     }
 }
 
@@ -142,15 +143,15 @@ var selectCard = function () {
     tableMsgType = 1
 }
 
-var finishRound = function (phase, players, username, userId, isGameOver) {
+var finishRound = function (phase, players, username, userId, isGameOver,positions) {
     playerMsgType = 1
     tableMsgType = 1
     isChatMsg = true
     if (isGameOver) {
-        chatText = 'Игрок ' + username + ' завершил игру ';// + utils.getPosition(gameService.positions().get(userId))
+        chatText = 'Игрок ' + username + ' завершил игру '+ utils.getPosition(positions.get(userId))
     } else {
 
-        chatText = 'Игрок ' + username + ' завершил раунд ';// + utils.getPosition(gameService.positions().get(userId))
+        chatText = 'Игрок ' + username + ' завершил раунд ' + utils.getPosition(positions.get(userId))
     }
 
     if (phase === 'asking') {
@@ -163,7 +164,8 @@ var finishRound = function (phase, players, username, userId, isGameOver) {
                 }
             })
             masterText = 'Игра завершена. Победил игрок ' + name + '!'
-        } else {
+        }
+        else {
             var name = ''
             players.forEach(function (value, key) {
                 if (value.status === "asker") {
@@ -172,12 +174,32 @@ var finishRound = function (phase, players, username, userId, isGameOver) {
             })
             masterText = 'Раунд завершен. Ходит игрок ' + name + '!'
         }
-
         masterMsgType = 1
     }
 }
 
-var update = function (data, players, game, oldPhase) {
+var exitGame=function (username,players,status) {
+    playerMsgType = 1
+    tableMsgType = 1
+    masterMsgType=1
+
+    if (status==='playing'){
+        var name = ''
+        players.forEach(function (value, key) {
+            if (value.status === "asker") {
+                name = value.name
+            }
+        })
+        masterText = 'Игрок ' + username + ' вышел из игры. Раунд завершен. Ходит игрок ' + name + '!'
+    }
+    else if(status==='starting'){
+        masterText = 'Был произведен сброс игры из-за малого количества игроков!'
+    }
+
+
+}
+
+var update = function (data, players, game, oldPhase,positions) {
     text = 'empty_response'
     isChatMsg = false
     masterMsgType = -1
@@ -185,7 +207,7 @@ var update = function (data, players, game, oldPhase) {
     tableMsgType = -1
     switch (data._command) {
         case 'Enter':
-            greetings(players.get(data._userId).name)
+            greetings(players.get(data._userId).name,game.status)
             break;
         case 'Start':
             start(game.status, players.get(data._userId).name)
@@ -198,28 +220,35 @@ var update = function (data, players, game, oldPhase) {
             break;
         case 'FinishRound':
             if (game.status === 'playing') {
-                finishRound(oldPhase, players, players.get(data._userId).name, data._userId, false)
+                finishRound(oldPhase, players, players.get(data._userId).name, data._userId, false,positions)
             }
             else {
-                finishRound(oldPhase, players, players.get(data._userId).name, data._userId, true)
+                finishRound(oldPhase, players, players.get(data._userId).name, data._userId, true,positions)
             }
 
             break;
-        case 'ReEnter':
-            playerMsgType = 0
-            tableMsgType = 0
+        case 'ResetRound':
+            exitGame(data._username,players,game.status,false)
             break;
-        case 'Remove':
+        case 'ResetGame':
+            exitGame(data._username,players,game.status,true)
+            break;
+        case 'Exit':
             playerMsgType = 1
             tableMsgType = 1
+            masterMsgType=1
+            masterText = 'Игрок ' + data._username + ' вышел из игры! '
             break;
+        case 'WaitingEnter':
+            masterMsgType = 0
+            masterText = 'Добро пожаловать, ' +data._username + '! Ожидайте завершения раунда.'
         default:
     }
 }
 
 module.exports = {
-    send: function (io, data, players, game, oldPhase) {
-        update(data, players, game, oldPhase)
+    send: function (io, data, players, game, oldPhase,positions) {
+        update(data, players, game, oldPhase,positions)
         sendMsg(io, players, game, data._userId)
     }
 }

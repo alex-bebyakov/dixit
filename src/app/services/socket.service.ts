@@ -20,7 +20,7 @@ export class SocketService {
     private gameBegan: boolean = false;
 
     constructor(private username: string) {
-        this.socket = new io('http://'+window.location.hostname+':'+window.location.port);
+        this.socket = new io();
         this.socketIdStream = this.createStream('socketId');
         this.usersStream = this.createStream('usersMap');
         this.chatMessageStream = this.createStream('chatMessage');

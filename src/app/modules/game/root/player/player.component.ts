@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Renderer} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {User} from "../../../../models/user";
 import {MessageService} from "../../../../services/message.service";
 import {UserMessage} from "../../../../models/user.message";
@@ -7,11 +7,7 @@ import {Http} from "@angular/http";
 import {Player} from "../../../../models/player";
 import {Game} from "../../../../models/game";
 import {CaruselService} from "../../../../services/carusel.service";
-import {GameMessage} from "../../../../models/game.message";
-import {Observable, Subject} from "rxjs";
-import {async} from "rxjs/scheduler/async";
-import {GameService} from "../../../../services/game.service";
-import {Card} from "../../../../models/card";
+
 declare var $: any;
 @Component({
     selector: 'player',

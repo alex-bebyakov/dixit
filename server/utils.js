@@ -137,7 +137,29 @@ module.exports = {
             default:
                 return 'лидером!!!'
         }
-    }
+    },
+    isAllPlayersAnswered:function(players_list_size,players_size, cards_list_size){
+
+        console.log('players_list_size_utils: '+players_list_size)
+        console.log('players_size_utils: '+players_size)
+        console.log('cards_list_size_utils: '+cards_list_size)
+        if(players_list_size===players_size+1){
+            if(players_list_size===cards_list_size){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else{
+            if(players_size+1===cards_list_size){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+}
 }
 
 

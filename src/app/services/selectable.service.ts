@@ -7,13 +7,17 @@ export class SelectableService {
     private element: any
     private items: any;
     private _wasActivated = false
-
+    private dx:number=0
     constructor() {
     }
 
     init(el: ElementRef) {
         this.element = $(el.nativeElement).find('.table-root')
         this.items = $(this.element).children('.table-card')
+        if(this.dx==0){
+            this.dx=$(this.items[0]).width()*this.items.length*0.5
+        }
+        console.log(this.items)
     }
 
     update(el: ElementRef) {
@@ -22,34 +26,17 @@ export class SelectableService {
     }
 
     activate(activateType): any {
-        let dx = this.items.length * 118.125 * 9 / 20 - 20;
         this.element.css({
             'display': 'block',
             'position': 'absolute',
-            'transform': 'translate(' + dx + 'px,0px) scale(1.8)',
+            'transform': 'translate(' + this.dx + 'px,0px) scale(1.8)',
             'z-index': '10'
         });
-        if (activateType) {
-            for (var i = 0; i < this.items.length; i++) {
-                $(this.items[i]).hover(
-                    function () {
-                        $(this).css({
-                            'transform': 'scale(1.3)',
-                            'transition': '1s'
-                        });
-                    }, function () {
-                        $(this).css({
-                            'transform': 'scale(1)',
-                            'transition': '1s'
-                        });
-                    }
-                );
-            }
-        } else {
+        if (!activateType) {
             this.element.attr('isDisactivate', 'false')
-            this._wasActivated = true;
+            this.dx=0
         }
-
+        this._wasActivated = true;
     }
 
     select(): void {
@@ -61,17 +48,6 @@ export class SelectableService {
             $(this.items[i]).css({
                 'transform': 'scale(1)',
             });
-            $(this.items[i]).hover(
-                function () {
-                    $(this).css({
-                        'transform': 'scale(1)',
-                    });
-                }, function () {
-                    $(this).css({
-                        'transform': 'scale(1)',
-                    });
-                }
-            );
         }
 
     }
@@ -107,5 +83,6 @@ export class SelectableService {
     setAttribute(name: string, value: any) {
         $(this.element).attr(name, value)
     }
+
 
 }

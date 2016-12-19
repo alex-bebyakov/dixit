@@ -13,19 +13,25 @@
 }
 
 .table-card-image {
-  overflow: hidden;
+
   height: 10.5vw;
   width: 7vw;
-  margin-left: 1.05vw;
-  margin-right: 1.05vw;
+  margin: 0.5vw 1.05vw;
   border: 1px solid transparent;
   border-radius: 5px;
+  transition: 1s;
 }
+.table-card-image:hover {
+transform: scale(1.05);
+  transition: 1s;
+}
+
 
 .table-card, .table-card-selection {
   float: left;
   display: inline-block;
   text-align: center;
+  overflow: hidden;
 }
 
 .table-card-label {

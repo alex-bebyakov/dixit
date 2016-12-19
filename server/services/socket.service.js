@@ -49,10 +49,15 @@ var disconnectUser = function (obj, io) {
         usersMap = usersMap.delete(obj.socketId);
         usersMap.forEach(function (value, key) {
             var data=value;
-            data["no"]=gameService.players().get(key).no
-            data["color"] = constants.Colors[gameService.players().get(key).no];
+            if(gameService.players().get(key)){
+                data["no"]=gameService.players().get(key).no
+                data["color"] = constants.Colors[gameService.players().get(key).no];
+            }
+            else{
+                data["no"]=gameService.waitingPlayers().get(key).no
+                data["color"] = constants.Colors[gameService.waitingPlayers().get(key).no];
+            }
             usersMap=usersMap.set(key,data)
-            console.log(data)
         })
     }
 
@@ -69,12 +74,10 @@ var disconnectUser = function (obj, io) {
 
 var connectUser = function (obj, io) {
     var data = obj.data;
-
     data["token"] = "newUser";
     if (usersMap.size > 5) {
         data["token"] = "toManyUsers";
     }
-
     else {
         usersMap.toArray().forEach(function (element) {
             if (element.username === obj.data.username) {
@@ -83,20 +86,17 @@ var connectUser = function (obj, io) {
         })
     }
     if (data["token"] === "newUser") {
-        if (gameService.started()) {
-            if (!gameService.isPlayerWasInGame(obj.data.username)) {
-                data["token"] = "gameBegan";
-            }
-            console.log( data["token"])
-            console.log(gameService.isPlayerWasInGame(obj.data.username))
-        }
         if (data["token"] === "newUser") {
             data["avatarImg"] = constants.Avatars.get(obj.data.username)
-
             gameService.addPlayer(io, obj.data.socketId, obj.data.username);
-            data["color"] = constants.Colors[gameService.players().get(obj.data.socketId).no];
-            data["no"] = gameService.players().get(obj.data.socketId).no
-
+            if(gameService.players().get(obj.data.socketId)){
+                data["color"] = constants.Colors[gameService.players().get(obj.data.socketId).no];
+                data["no"] = gameService.players().get(obj.data.socketId).no
+            }
+            else{
+                data["color"] = constants.Colors[gameService.waitingPlayers().get(obj.data.socketId).no];
+                data["no"] = gameService.waitingPlayers().get(obj.data.socketId).no
+            }
         }
     }
     usersMap = usersMap.set(obj.data.socketId, data);

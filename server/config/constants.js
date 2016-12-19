@@ -1,4 +1,4 @@
-exports.Names = ["Rocket", "DeBook", "TimOFey", "Diam", "Doggy", "Batux", "Groove"];
+exports.Names = ["Rocket", "DeBook", "TimOFey", "Diam", "Doggy", "Batux", "Groove","Bony"];
 
 exports.Avatars = require('immutable').Map({
     Rocket: "assets/images/rocket.jpg",
@@ -7,7 +7,8 @@ exports.Avatars = require('immutable').Map({
     Diam: "assets/images/diam.jpg",
     Doggy: "assets/images/doggy.jpg",
     Batux: "assets/images/batux.jpg",
-    Groove: "assets/images/groove.jpg"
+    Groove: "assets/images/groove.jpg",
+    Bony: "assets/images/bony.jpg"
 });
 
 exports.Colors = ['#e5e4e2', '#318e5f', '#ce2c27', '#4974a7', '#d1c734', '#c23371']

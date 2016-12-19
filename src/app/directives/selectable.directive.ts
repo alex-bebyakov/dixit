@@ -11,7 +11,6 @@ import {SelectableService} from "../services/selectable.service";
 })
 export class SelectableDirective {
     public click = new EventEmitter();
-    private isSelect = false
     message: UserMessage;
     _user: User;
     _userId: string
@@ -25,22 +24,17 @@ export class SelectableDirective {
     @HostListener('click', ['$event']) onClick(e) {
         this.selectableService.update(this.el);
         if (this._isActive) {
-            if (!this.isSelect) {
-                this.selectableService.activate(true)
-                this.isSelect = true;
-            } else {
-                this.selectableService.select()
-                this.isSelect = false;
-                if (this._user.isUser) {
-                    this.message.username = this._user.username;
-                    this.message.userId = this._userId;
-                    this.message.command = "SelectCard";
-                    this.card.img = this.selectableService.getSrc(e)
-                    this.message.card = this.card;
-                    new MessageService<UserMessage>(this.http).sendMessage(this.message, '/api/game').subscribe();
-                    this.message.command = "";
-                    this.message.text = "";
-                }
+            this.selectableService.select()
+            if (this._user.isUser) {
+                this.message.username = this._user.username;
+                this.message.userId = this._userId;
+                this.message.command = "SelectCard";
+                this.card.img = this.selectableService.getSrc(e)
+                this.message.card = this.card;
+                new MessageService<UserMessage>(this.http).sendMessage(this.message, '/api/game').subscribe();
+                this.message.command = "";
+                this.message.text = "";
+                this.selectableService.setWasActivated(false)
             }
         }
         else {

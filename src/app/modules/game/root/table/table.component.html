@@ -1,11 +1,9 @@
 <div class="table">
-    <div class="table-root" isDisactivate="true" [isActive]="player.tableActive" appSelectable [user]="user"
-         [userId]="userId">
+    <div class="table-root" isDisactivate="true" [isActive]="player.tableActive" appSelectable [user]="user" [userId]="userId">
         <div *ngFor="let card of game.cards" class="table-card" [style.transform]="setTransform(card.asking)">
             <div class="table-card-image">
                 <img src={{card.img}} class="img-fluid "/>
             </div>
-
             <div class="table-card-label" *ngIf="game.phase=='finishing'" [style.background-color]="card.color">
                 {{game.playersNames[card.playerN]}}, +{{game.roundScores[card.playerN]}}
             </div>

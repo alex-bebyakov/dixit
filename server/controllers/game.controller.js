@@ -3,16 +3,23 @@ var messageService = require('../services/message.service');
 
 exports.sendMsg = function (io, req, res) {
     var data = req.body;
-    console.log('game-controller: ')
-    console.log('_username: '+data._username+', _command: '+data._command+', _userId: '+data._userId+', _text: '+data._text+', _card: '+data._card)
-    console.log()
-    if (gameService.players().get(data._userId).name === data._username) {
-        if (isUpdate(data)) {
-            gameService.update(data)
+    if(gameService.players().get(data._userId)){
+        if (gameService.players().get(data._userId).name === data._username) {
+            if (isUpdate(data)) {
+                gameService.update(data)
+            }
+            messageService.send(io, data, gameService.players(), gameService.game(), gameService.oldPhase(),gameService.positions())
+            res.status(200).send();
         }
-        messageService.send(io, data, gameService.players(), gameService.game(), gameService.oldPhase())
-        res.status(200).send();
     }
+    else{
+        if (gameService.waitingPlayers().get(data._userId).name === data._username) {
+            data._command = 'WaitingEnter'
+            messageService.send(io, data, gameService.waitingPlayers(), gameService.game(), gameService.oldPhase(),gameService.positions())
+            res.status(200).send();
+        }
+    }
+
 }
 
 var isUpdate = function (data) {

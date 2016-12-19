@@ -12,6 +12,15 @@
   overflow: hidden;
   width: 90px;
   height: 30px;
+  float: left;
+  display: inline-block;
+}
+.mipple-image {
+  overflow: hidden;
+  width: 20px;
+  height: 20px;
+  float: left;
+  display: inline-block;
 }
 
 .image img {

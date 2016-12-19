@@ -10,12 +10,10 @@ import {Http} from "@angular/http";
 import {Game} from "../../../models/game";
 import {Player} from "../../../models/player";
 import {ChatComponent} from "./chat/chat.component";
-import {MasterMessage} from "../../../models/master.message";
 import {SelectableService} from "../../../services/selectable.service";
 import {MasterComponent} from "./master/master.component";
 import {CaruselService} from "../../../services/carusel.service";
-import {PlayerComponent} from "./player/player.component";
-import {LocationStrategy} from "@angular/common";
+
 
 declare var $: any;
 
@@ -26,6 +24,7 @@ declare var $: any;
 })
 export class RootComponent implements OnInit {
     public userIni: boolean = false;
+    public mippleIni: boolean = false;
     public user: User = new User();
     public userId: string
     gameOfPlayer: Game = new Game()
@@ -37,6 +36,7 @@ export class RootComponent implements OnInit {
     public playerMessage: Observable<GameMessage> = new Observable<GameMessage>();
     playerService: MessageService<GameMessage>
     tableService: MessageService<GameMessage>
+    mipple_dx:Array<number>=[]
     @ViewChild(ChatComponent) chatComponent: ChatComponent
     @ViewChild(MasterComponent) masterComponent: MasterComponent
 
@@ -49,6 +49,10 @@ export class RootComponent implements OnInit {
         this.user.username = username;
         this.playerService = new MessageService<GameMessage>(http);
         this.tableService = new MessageService<GameMessage>(http);
+        for (let i = 0; i <6; i++) {
+            this.mipple_dx[i]=0
+        }
+
     }
 
     ngOnInit(): void {
@@ -58,18 +62,38 @@ export class RootComponent implements OnInit {
         this.endPoint.masterMessageStream.subscribe(data => {
             this.masterComponent.master.addMessage(data);
             this.masterComponent.onAnimate()
-
         });
         this.endPoint.playerMessageStream.subscribe(data => {
             this.playerService.addMessage(data)
+
         });
         this.endPoint.tableMessageStream.subscribe(data => {
             this.tableService.addMessage(data)
             if (data.game.phase == 'finishing' && !this.selectableService.wasActivated()) {
                 this.selectableService.init(this.el)
                 this.selectableService.activate(false);
-            } else if (data.game.phase == 'selecting' && this.selectableService.wasActivated()) {
+            }
+            else if (data.game.phase == 'selecting' && !this.selectableService.wasActivated()) {
+                this.selectableService.init(this.el)
+                if(this.playerOfTable.tableActive){
+                    this.selectableService.activate(true)
+                }
+            }
+            else if(data.game.phase == 'asking'){
                 this.selectableService.setWasActivated(false)
+                for (let i = 0; i <data.game.playersNames.length; i++) {
+                    this.mipple_dx[i]=data.game.scores[i]*20
+                    let dx=this.mipple_dx[i]+40
+                    let cl='.mipple_'
+                        .concat(i.toString())
+                        .concat('-image')
+                    $(cl).css({
+                        'transform':'translate(40px,0px)'
+                    })
+                    $(cl).css({
+                        'transform':'translate(' + dx + 'px,0px)'
+                    })
+                }
             }
         });
 
@@ -101,9 +125,41 @@ export class RootComponent implements OnInit {
                     this.userIni = true;
                     this.user = user;
                     this.userId = this.endPoint.userId;
-
                 }
-
+            })
+            for (let i = 0; i <users.length; i++) {
+                let element='<div class="mipple_'
+                    .concat(i.toString())
+                    .concat('-image"> <img src="assets/images/')
+                    .concat('mipple_')
+                    .concat(i.toString())
+                    .concat('.png" class="img-fluid"/> </div>')
+                let cl='.mipple_'
+                    .concat(i.toString())
+                    .concat('-image')
+                $(cl).remove()
+                let dx=this.mipple_dx[i]+40
+                $(element).appendTo('.navbar-fixed-top').css({
+                    'overflow': 'hidden',
+                    'margin-top':'5px',
+                    'margin-left':'-15px',
+                    'width': '20px',
+                    'height': '40px',
+                    'float': 'left',
+                    'display': 'inline-block',
+                    'transform':'translate(' + dx + 'px,0px)'
+                })
+            }
+            let element='<div class="finish-flag"> <img src="assets/images/finish.png" class="img-fluid"/> </div>'
+            $('.finish-flag').remove()
+            $(element).appendTo('.navbar-fixed-top').css({
+                'overflow': 'hidden',
+                'margin-top':'5px',
+                'width': '20px',
+                'height': '40px',
+                'float': 'left',
+                'display': 'inline-block',
+                'transform':'translate(640px,0px)'
             })
         })
     }

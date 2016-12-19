@@ -92,8 +92,6 @@ export class CaruselService {
                 'opacity': '1'
             })
         }
-
-        console.log(this.element.width())
         this._isActive = true;
         this.card.asking = activationType;
     }

@@ -6,17 +6,15 @@ var Card = require('../models/card')
 var Game = require('../models/game')
 var Selection = require('../models/selection')
 const MAX_SCORE = 30
-const DECK_AMOUNT = 168
+const DECK_AMOUNT = 167
 const CLOSE_CARD_IMG = 'assets/images/cards/card_.png'
 var playerNo = 0;
 var game = new Game('starting', 'asking', '', []);
 var players = Immutable.Map({});
+var waitingPlayers= Immutable.Map({});
 var deck = [];
-
 var cards_list = Immutable.Map({});
 var positions = Immutable.Map({});
-
-var players_list =  Immutable.Map({});
 var oldPhase = '';
 var closeCard = new Card(CLOSE_CARD_IMG, false)
 var finishCommands = 0
@@ -26,7 +24,6 @@ var tempSelections = []
 var tempDeck = []
 
 var gameTick = function (data) {
-
     var player = players.get(data._userId)
     players = players.delete(data._userId)
     if (deck.length === 0) {
@@ -55,7 +52,8 @@ var gameTick = function (data) {
                         player.handActive = false;
                     } else if (game.phase === 'answering') {
                         player.handActive = false;
-                        if (players.size === cards_list.size - 1) {
+
+                        if (players.size + 1 === cards_list.size) {
                             game.phase = 'selecting'
                             oldPhase = game.phase
                             game.cards = []
@@ -77,7 +75,6 @@ var gameTick = function (data) {
                     }
                 }
             }
-
             players = players.set(data._userId, player)
         }
         else if (data._command === 'SelectCard') {
@@ -86,7 +83,6 @@ var gameTick = function (data) {
                     var selection = new Selection()
                     selection.img = utils.generateNumberImg(player.no, j)
                     selection.no = j
-
                     tempSelections.push(selection)
                     var closeSelection = new Selection()
                     closeSelection.img = utils.generateNumberImg(player.no, -1)
@@ -111,7 +107,6 @@ var gameTick = function (data) {
                 game.selections = tempSelections
                 tempSelections = []
                 cards_list.forEach(function (value, key) {
-
                     if (value.asking) {
                         for (var j = 0; j < game.cards.length; j++) {
                             if (game.cards[j].img == value.img) {
@@ -133,20 +128,14 @@ var gameTick = function (data) {
             players = players.set(data._userId, player)
             finishCommands++;
             if (finishCommands === players.size) {
-                game.phase = 'asking'
-                oldPhase = 'asking'
                 if (game.status === 'over') {
                     resetRound(true)
                 } else {
                     resetRound(false)
                 }
-
             }
         }
     }
-    console.log('game-service: ')
-    console.log('_username: '+data._username+', _command: '+data._command+', _userId: '+data._userId+', _text: '+data._text+', _card: '+data._card)
-    console.log()
 }
 
 var fillDeck = function (amount) {
@@ -163,21 +152,29 @@ var fillDeck = function (amount) {
 };
 
 var resetRound = function (isGameOver) {
+    finishCommands = 0
+    if(!waitingPlayers.isEmpty()){
+        waitingPlayers.forEach(function (value, key) {
+            players=players.set(key,value)
+            game.playersNames[value.no]=value.name
+        })
+        waitingPlayers.clear()
+    }
+
     if (isGameOver) {
         newGame()
-        finishCommands = 0;
     } else {
         lastAskPlayerNo++;
         if (lastAskPlayerNo > players.size - 1) {
             lastAskPlayerNo = 0;
         }
-        finishCommands = 0
         game.cards = []
         game.selections = []
         game.roundScores = []
+        game.phase = 'asking'
+        oldPhase = 'asking'
         cards_list = Immutable.Map({});
         players.forEach(function (value, key) {
-            value.selectImg = ''
             value.selectNum = 0
             value.handActive = true
             if (value.no === lastAskPlayerNo) {
@@ -187,7 +184,6 @@ var resetRound = function (isGameOver) {
             }
         })
     }
-
 }
 
 var updateScores = function () {
@@ -202,7 +198,9 @@ var updateScores = function () {
             if (game.cards[value.selectNum - 1].asking) {
                 numOfRightAnswers++;
                 scores = scores.set(key, 3)
-            } else {
+
+            }
+
                 cards_list.forEach(function (value1, key1) {
                     if (game.cards[value.selectNum - 1].img === value1.img) {
                         if (players.get(key1).selectNum !== 0 && players.get(key1) !== value) {
@@ -211,7 +209,7 @@ var updateScores = function () {
                         }
                     }
                 })
-            }
+
         } else {
             scores = scores.set(key, 3)
             askingPlayerKey = key
@@ -240,7 +238,8 @@ var updateScores = function () {
                 })
             }
         })
-    } else {
+    }
+    else {
         players.forEach(function (value, key) {
             value.score += scores.get(key)
         })
@@ -275,7 +274,6 @@ var startGame = function () {
             game.id = utils.createRandomId(7)
             utils.dealCards(deck, players, 6);
             players.forEach(function (value, key) {
-
                 if (value.active) {
                     value.active = false;
                     value.status = "asker"
@@ -283,9 +281,7 @@ var startGame = function () {
                     value.status = "answer"
                 }
                 value.handActive = true;
-                players_list=players_list.set(key,value)
             })
-
         }
     }
 };
@@ -326,7 +322,6 @@ var newGame = function () {
         value.handActive = false
         value.tableActive = false
     })
-    players_list =  Immutable.Map({});
     game.cards = []
     game.selections = []
     game.scores = [];
@@ -336,29 +331,22 @@ var newGame = function () {
 
 module.exports = {
     addPlayer: function (io, id, name) {
-        var reEnter=false
-        players_list.forEach(function (value, key) {
-            if (name ===value.name && game.status === 'playing') {
-                players = players.set(id, value)
-                players.get(id).card = utils.dealCardsForPlayer(deck, 6);
-                var data=[]
-                data["_username"]=name
-                data["_command"]='ReEnter'
-                data["_userId"]=id
-                messageService.send(io, data, players, game,oldPhase)
-                reEnter=true
-            }
-        })
-        if(!reEnter){
-            var player = new Player({});
-            player.name = name;
-            player.no = playerNo;
-            player.score = 0;
-            player.cards = []
+        var player = new Player({});
+        player.name = name;
+        player.score = 0;
+        player.selectNum = 0
+        player.no = playerNo;
+        if (game.status === 'playing') {
+            player.cards = utils.dealCardsForPlayer(deck, 6);
+            player.handActive = true;
+            player.status='answer'
+            player.active = false;
+            waitingPlayers=waitingPlayers.set(id, player)
+        }else{
+
             player.handActive = false;
             player.tableActive = false;
-            player.selectImg = ''
-            player.selectNum = 0
+            player.cards = []
             if (0 === playerNo) {
                 player.active = true;
             } else {
@@ -366,37 +354,61 @@ module.exports = {
             }
             players = players.set(id, player)
             game.playersNames[playerNo] = name
-            playerNo++;
         }
-
-
-
-
+        playerNo++;
     },
     removePlayer: function (io, id) {
-        var player = players.get(id)
-        var removedPlayerNumber = player.no;
-        returnCardsToDeck(player.cards);
-        players = players.delete(id);
-        playerNo--;
-        players.forEach(function (value, key) {
-            if (value.no > removedPlayerNumber) {
-                value.no = value.no - 1
+        if(players.get(id)){
+            var player = players.get(id)
+            var removedPlayerNumber = player.no;
+            returnCardsToDeck(player.cards);
+            players = players.delete(id);
+            players.forEach(function (value, key) {
+                if (value.no > removedPlayerNumber) {
+                    value.no = value.no - 1
+                }
+                if (value.no === 0) {
+                    value.active = true;
+                }
+                players = players.set(key, value)
+            })
+            game.playersNames = []
+            players.forEach(function (value, key) {
+                game.playersNames[value.no] = value.name
+            })
+            var data = []
+            data["_username"] = player.name
+            if(game.status==='playing'){
+                data["_userId"] = id
+                if(players.size<3){
+                    resetRound(true)
+                    data["_command"] = 'ResetGame'
+                }
+                else{
+                    resetRound(false)
+                    data["_command"] = 'ResetRound'
+                }
             }
-           if(value.no===0){
-                value.active=true;
-           }
-            players = players.set(key, value)
-
-        })
-
-
-
-        var data=[]
-        data["_username"]=player.name
-        data["_command"]='Remove'
-        data["_userId"]=id
-        messageService.send(io, data, players, game,oldPhase)
+            else{
+                data["_command"] = 'Exit'
+            }
+            messageService.send(io, data, players, game, oldPhase)
+        }
+        else{
+            var player = waitingPlayers.get(id)
+            var removedPlayerNumber = player.no;
+            waitingPlayers = waitingPlayers.delete(id);
+            waitingPlayers.forEach(function (value, key) {
+                if (value.no > removedPlayerNumber) {
+                    value.no = value.no - 1
+                }
+                if (value.no === 0) {
+                    value.active = true;
+                }
+                waitingPlayers = waitingPlayers.set(key, value)
+            })
+        }
+        playerNo--;
     },
     update: function (data) {
         if (game.status === 'starting') {
@@ -418,14 +430,17 @@ module.exports = {
     players: function () {
         return players;
     },
+    waitingPlayers: function () {
+        return waitingPlayers;
+    },
     positions: function () {
         return positions;
     },
     isPlayerWasInGame: function (name) {
-        var result =false
+        var result = false
         players_list.forEach(function (value, key) {
-            if (name ===value.name && game.status === 'playing') {
-                result =true;
+            if (name === value.name && game.status === 'playing') {
+                result = true;
             }
         })
         return result;
