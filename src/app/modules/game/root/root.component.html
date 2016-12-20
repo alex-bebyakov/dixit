@@ -1,7 +1,7 @@
 <div class="game-area container-fluid"
      *ngIf="!endPoint.isUserExist()&&!endPoint.isToManyUsers()&&!endPoint.isGameBegan()">
     <div class="row">
-        <div class="playing-area col-lg-7 col-md-7 col-xs-7">
+        <div class="playing-area col-xl-7 col-lg-7 col-md-7 col-sm-7 col-xs-7">
             <div class="players">
                 <div class="player-dummy"></div>
                 <div *ngFor="let user of endPoint.users | async">
@@ -13,7 +13,7 @@
             <table [user]="user" [userId]="userId" [game]="gameOfTable" [player]="playerOfTable"></table>
             <player [user]="user" [userId]="userId" [game]="gameOfPlayer" [player]="playerOfPlayer"></player>
         </div>
-        <div class="talking-area col-lg-4 col-md-4 col-xs-4">
+        <div class="talking-area col xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
             <master></master>
             <div class="clearfix"></div>
         <chat [user]="user"></chat>
