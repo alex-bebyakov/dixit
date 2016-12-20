@@ -146,6 +146,10 @@ export class CaruselService {
         return this.card;
     }
 
+    getType(event) {
+        return $(event.target).parent().attr('type')
+    }
+
     private animateImg = function (img: any, position: number, radius: number, isLeftTurn: boolean): any {
         let turn = 1;
         let dy = 0;

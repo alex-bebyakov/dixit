@@ -64,8 +64,8 @@ export class SelectableService {
         }
     }
 
-    getSrc(e) {
-        return $(e.path[0]).attr('src');
+    getSrc(event) {
+        return $(event.target).attr('src');
     }
 
     isDisactivate(): string {

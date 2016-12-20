@@ -14,8 +14,10 @@ export class CaruselDirective {
         this.caruselService.initialize(el, ['divImgClass', 'divArrowClass', 'askInputClass', 'answerInputClass', 'shift_X', 'shift_Y', 'perspective', 'radius']);
     }
 
-    @HostListener('click', ['$event']) onClick(e) {
-        let type = e.path[1].getAttribute('type')
+    @HostListener('click', ['$event']) onClick(event) {
+
+        let type =  this.caruselService.getType(event)
+
         if (this._isActive) {
             if (!this.caruselService.isActive()) {
                 this.caruselService.activate(this._activationStatus);

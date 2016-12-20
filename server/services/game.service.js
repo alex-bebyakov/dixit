@@ -203,8 +203,8 @@ var updateScores = function () {
         if (value.selectNum > 0) {
             if (game.cards[value.selectNum - 1].asking) {
                 numOfRightAnswers++;
-                scores = scores.set(key, 3)
-
+                var tempScore = scores.get(key) + 3
+                scores = scores.set(key, tempScore)
             }
 
                 cards_list.forEach(function (value1, key1) {
